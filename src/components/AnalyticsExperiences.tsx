@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Activity, ArrowDownRight, ArrowUpRight, ArrowUpRightFromSquare, CirclePause, CirclePlay, Clock3, MousePointer2, Radio, RefreshCw, Sparkles, Users, Zap } from 'lucide-react'
+import { Activity, ArrowDownRight, ArrowUpRight, CirclePause, CirclePlay, Clock3, MousePointer2, Radio, RefreshCw, Sparkles, Users, Zap } from 'lucide-react'
 
 type Range = '15m' | '1h' | '24h'
 type Channel = 'All traffic' | 'Web' | 'App'
