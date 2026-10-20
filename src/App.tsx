@@ -115,7 +115,8 @@ export default function App() {
     '--glass-fill-soft': ((100 - glass) / 100) * 0.09 + 0.015,
     '--glass-fill-strong': ((100 - glass) / 100) * 0.32 + 0.08,
     '--glass-fill-dark': ((100 - glass) / 100) * 0.3 + 0.03,
-    '--glass-accent-fill': 0.9 - (glass / 100) * 0.5
+    '--glass-accent-fill': 0.9 - (glass / 100) * 0.5,
+    '--glass-accent-fill-soft': 0.72 - (glass / 100) * 0.4
   } as CSSProperties}>
     <div className="ambient ambient-one" /><div className="ambient ambient-two" /><div className="ambient ambient-three" />
     <aside className={'sidebar ' + (mobileNav ? 'sidebar-open' : '')}>
