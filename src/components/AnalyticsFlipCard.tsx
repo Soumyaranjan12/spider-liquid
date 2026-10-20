@@ -49,7 +49,7 @@ export default function AnalyticsFlipCard<T extends object>({
     <motion.div
       className="analytics-flip-inner"
       animate={{ rotateY: editing ? 180 : 0 }}
-      transition={{ duration: 0.72, ease: [0.22, 0.68, 0, 1] }}
+      transition={{ type: 'spring', stiffness: 155, damping: 23, mass: 0.92 }}
     >
       <div className="analytics-flip-face analytics-flip-front" aria-hidden={editing}>
         <div className="afc-toolbar">
