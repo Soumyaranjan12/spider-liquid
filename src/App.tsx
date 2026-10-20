@@ -335,8 +335,8 @@ export default function App() {
         <button key={name} onClick={() => { setCategory(name); setPage('Components') }}><span className={'category-dot dot-' + i} />{name}</button>
       )}</div>
       <div className="sidebar-bottom">
-        <button className="version-card" onClick={() => { setSelected('analytics'); setPage('Playground') }}><div className="version-icon"><BarChart3 size={15} /></div><div><b>Analytics component</b><p>KPI cards, trends, CSV export</p></div><ArrowUpRight size={14} /></button>
-        <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Creative lab</span></div><button aria-label="Browse analytics components" onClick={() => { setCategory('Analytics'); setPage('Components') }}><BarChart3 size={16} /></button></div>
+        <button className="version-card" onClick={() => setPage('Components')}><div className="version-icon"><Layers3 size={15} /></div><div><b>Explore components</b><p>Browse the full UI library</p></div><ArrowUpRight size={14} /></button>
+        <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Creative lab</span></div><button aria-label="Browse components" onClick={() => setPage('Components')}><Layers3 size={16} /></button></div>
       </div>
     </aside>
     {mobileNav && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileNav(false)} />}
@@ -346,40 +346,40 @@ export default function App() {
         <div className="breadcrumbs"><span>SpiderPanda</span><span className="crumb-slash">/</span><b>{page}</b></div>
         <div className="top-actions">
           <a className="top-icon" href="https://github.com/Soumyaranjan12/spider-liquid" target="_blank" rel="noreferrer" aria-label="GitHub repository"><Github size={17} /></a>
-          <button className="top-code" onClick={() => { setCategory('Analytics'); setPage('Components') }}><BarChart3 size={15} /> Analytics UI <ArrowUpRight size={14} /></button>
+          <button className="top-code" onClick={() => { setCategory('All components'); setPage('Components') }}><Layers3 size={15} /> Browse library <ArrowUpRight size={14} /></button>
         </div>
       </header>
       <div className="page-content">
         {page === 'Overview' && <>
           <section className="hero-section studio-hero">
             <div className="hero-copy">
-              <div className="eyebrow-line"><span className="eyebrow-icon"><Activity size={13} /></span> BUILD · MEASURE · IMPROVE <span className="eyebrow-rule" /></div>
-              <h1>Your next idea<br />starts <span className="gradient-word">here.</span></h1>
-              <p className="hero-subtitle">A practical component studio with live previews, API documentation, and modular analytics UI building blocks.</p>
-              <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setSelected('analytics'); setPage('Playground') }}>Try analytics component <BarChart3 size={16} /></GlassButton><button className="text-button" onClick={() => { setCategory('Analytics'); setPage('Components') }}>Browse analytics components <ArrowUpRight size={15} /></button></div>
-              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>19 reusable components</b><br />Interactive previews · API docs · exportable analytics</span></div>
+              <div className="eyebrow-line"><span className="eyebrow-icon"><Layers3 size={13} /></span> BUILD WITH BETTER BUILDING BLOCKS <span className="eyebrow-rule" /></div>
+              <h1>Interfaces with<br /><span className="gradient-word">more feeling.</span></h1>
+              <p className="hero-subtitle">A curated React component library with polished glass surfaces, practical controls, clear feedback, and copy-ready examples. Explore every component in the live playground.</p>
+              <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setCategory('All components'); setPage('Components') }}>Explore components <ArrowRight size={16} /></GlassButton><button className="text-button" onClick={() => { setSelected('button'); setPage('Playground') }}>Open playground <ArrowUpRight size={15} /></button></div>
+              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>19 reusable components</b><br />Live previews · API docs · copy-ready code</span></div>
             </div>
             <div className="home-launch-panel glass-panel overview-toolkit">
-              <div className="home-panel-top"><div><span className="mini-label">ANALYTICS COMPONENTS</span><h2>Build your own dashboard</h2></div><span className="home-panel-live"><i/> Ready to edit</span></div>
-              <p className="overview-toolkit-copy">Pick a building block to preview it. The dashboard has an editable demo-data panel that updates its graph as you change values.</p>
+              <div className="home-panel-top"><div><span className="mini-label">COMPONENT EXPLORER</span><h2>Find your starting point</h2></div><span className="home-panel-live"><i/> Ready to preview</span></div>
+              <p className="overview-toolkit-copy">Jump into a few popular building blocks, or browse the full library across controls, forms, surfaces, feedback, navigation, overlays, and analytics.</p>
               <div className="quick-game-grid">
-                <button onClick={() => { setSelected('analytics'); setPage('Playground') }}><span className="quick-game-icon metric-icon">↗</span><span><b>Analytics Dashboard</b><small>Edit KPI values, trends and sources</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setSelected('metric-card'); setPage('Playground') }}><span className="quick-game-icon metric-icon">#</span><span><b>Metric cards</b><small>Numbers, change and sparkline</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setSelected('trend-chart'); setPage('Playground') }}><span className="quick-game-icon metric-icon">⌁</span><span><b>Trend charts</b><small>Editable series and data points</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setSelected('traffic-sources'); setPage('Playground') }}><span className="quick-game-icon metric-icon">◔</span><span><b>Sources & data tables</b><small>Proportions, percentages and sorting</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('button'); setPage('Playground') }}><span className="quick-game-icon component-icon">↗</span><span><b>Liquid Button</b><small>Primary actions and interaction</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('toggle'); setPage('Playground') }}><span className="quick-game-icon component-icon">◉</span><span><b>Liquid Toggle</b><small>A tactile, controlled switch</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('card'); setPage('Playground') }}><span className="quick-game-icon component-icon">▱</span><span><b>Glass Card</b><small>Surfaces for grouped content</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('dialog'); setPage('Playground') }}><span className="quick-game-icon component-icon">□</span><span><b>Glass Dialog</b><small>Confirmation and focused tasks</small></span><ChevronRight size={15}/></button>
               </div>
-              <div className="home-panel-foot"><div><BarChart3 size={15}/><span><b>Demo data settings</b><small>Saved locally in this browser</small></span></div><button onClick={() => { setCategory('Analytics'); setPage('Components') }}>All analytics UI <ArrowUpRight size={13}/></button></div>
+              <div className="home-panel-foot"><div><Code2 size={15}/><span><b>Ready for your app</b><small>Copy the TSX examples into your project</small></span></div><button onClick={() => setPage('Documentation')}>Read the docs <ArrowUpRight size={13}/></button></div>
             </div>
           </section>
           <section className="stats-row studio-stats">
-            <div><span className="stat-label">COMPONENTS</span><b>19</b><small>Controls, surfaces, feedback and analytics</small></div>
-            <div><span className="stat-label">ANALYTICS UI</span><b className="stat-word">Interactive</b><small>Range selector, metrics, CSV export</small></div>
-            <div><span className="stat-label">DOCUMENTATION</span><b className="stat-word">API</b><small>Props, examples, implementation notes</small></div>
-            <div><span className="stat-label">ANALYTICS BLOCKS</span><b>05</b><small>Dashboard, KPIs, trends, sources, table</small></div>
+            <div><span className="stat-label">COMPONENTS</span><b>{components.length}</b><small>Reusable React building blocks</small></div>
+            <div><span className="stat-label">CATEGORIES</span><b className="stat-word">8 areas</b><small>From controls to analytics</small></div>
+            <div><span className="stat-label">PLAYGROUND</span><b className="stat-word">Live</b><small>Test component behavior before use</small></div>
+            <div><span className="stat-label">CODE & DOCS</span><b className="stat-word">Ready</b><small>Copyable examples and API guidance</small></div>
           </section>
           <section className="section-block">
-            <div className="section-heading"><div><div className="section-kicker">COMPONENT STUDIO</div><h2>Useful pieces. <span>Ready to test.</span></h2><p className="section-description">Open a component to explore the live preview, API reference and copy-ready snippet.</p></div><button className="view-all" onClick={() => setPage('Components')}>Browse components <ArrowRight size={15} /></button></div>
-            <div className="featured-grid">{components.filter(c => ['metric-card', 'trend-chart', 'traffic-sources', 'analytics-table'].includes(c.id)).map((c, i) =>
+            <div className="section-heading"><div><div className="section-kicker">COMPONENT LIBRARY</div><h2>Useful pieces. <span>Ready to ship.</span></h2><p className="section-description">Browse the library by purpose, try each component, and copy the code you need.</p></div><button className="view-all" onClick={() => { setCategory('All components'); setPage('Components') }}>Browse all components <ArrowRight size={15} /></button></div>
+            <div className="featured-grid">{components.filter(c => ['button', 'toggle', 'card', 'dialog'].includes(c.id)).map((c, i) =>
               <motion.button whileHover={{ y: -4 }} key={c.id} className={'featured-card feature-' + i} onClick={() => { setSelected(c.id); setPage('Playground') }}>
                 <div className="featured-card-top"><span className="component-index">0{i + 1}</span><span className="card-arrow"><ArrowUpRight size={15} /></span></div>
                 <div className="featured-preview"><MiniPreview id={c.id} /></div>
@@ -387,7 +387,7 @@ export default function App() {
               </motion.button>
             )}</div>
           </section>
-        </>}
+        </> }
         {page === 'Components' && <section className="subpage">
           <div className="subpage-heading"><div className="section-kicker">THE LIBRARY</div><h1>Made to <span>compose.</span></h1><p>Explore the full collection of interactive liquid-glass building blocks.</p></div>
           <div className="library-toolbar"><GlassSearch placeholder="Search components…" value={search} onChange={setSearch} /><div className="category-pills">{categories.map(c => <button key={c} className={category === c ? 'active' : ''} onClick={() => setCategory(c)}>{c}</button>)}</div></div>
