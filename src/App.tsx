@@ -285,7 +285,7 @@ export default function App() {
         <button key={name} onClick={() => { setCategory(name); setPage('Components') }}><span className={'category-dot dot-' + i} />{name}</button>
       )}</div>
       <div className="sidebar-bottom">
-        <button className="version-card" onClick={() => setPage('Games')}><div className="version-icon"><Gamepad2 size={15} /></div><div><b>Take a break</b><p>Snake · Chess · Pen Fight</p></div><ArrowUpRight size={14} /></button>
+        <button className="version-card" onClick={() => { setSelected('analytics'); setPage('Playground') }}><div className="version-icon"><BarChart3 size={15} /></div><div><b>Analytics component</b><p>KPI cards, trends, CSV export</p></div><ArrowUpRight size={14} /></button>
         <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Creative lab</span></div><button aria-label="Open analytics" onClick={() => setPage('Analytics')}><BarChart3 size={16} /></button></div>
       </div>
     </aside>
@@ -303,31 +303,23 @@ export default function App() {
         {page === 'Overview' && <>
           <section className="hero-section studio-hero">
             <div className="hero-copy">
-              <div className="eyebrow-line"><span className="eyebrow-icon"><Activity size={13} /></span> PLAY · BUILD · ANALYSE <span className="eyebrow-rule" /></div>
+              <div className="eyebrow-line"><span className="eyebrow-icon"><Activity size={13} /></span> BUILD · MEASURE · IMPROVE <span className="eyebrow-rule" /></div>
               <h1>Your next idea<br />starts <span className="gradient-word">here.</span></h1>
-              <p className="hero-subtitle">A practical creative lab for interactive components, local activity insights, and mini games. No decorative controls pretending to do a job.</p>
-              <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setRequestedGame('snake'); setPage('Games') }}>Launch a game <Gamepad2 size={16} /></GlassButton><button className="text-button" onClick={() => setPage('Analytics')}>View analytics <ArrowUpRight size={15} /></button></div>
-              <div className="hero-proof"><div className="proof-avatars"><span>🐼</span><span>🕷️</span><span>✎</span></div><span><b>3 mini games · 14 pen classics</b><br />Single player and invite-link multiplayer</span></div>
+              <p className="hero-subtitle">A practical component studio with interactive previews, a working analytics dashboard, and local workspace insights.</p>
+              <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setSelected('analytics'); setPage('Playground') }}>Try analytics component <BarChart3 size={16} /></GlassButton><button className="text-button" onClick={() => setPage('Analytics')}>View local activity <ArrowUpRight size={15} /></button></div>
+              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>15 reusable components</b><br />Interactive previews · API docs · exportable analytics</span></div>
             </div>
-            <div className="home-launch-panel glass-panel">
-              <div className="home-panel-top"><div><span className="mini-label">QUICK LAUNCH</span><h2>Choose your mode</h2></div><span className="home-panel-live"><i/> Ready</span></div>
-              <div className="quick-game-grid">
-                <button onClick={() => { setRequestedGame('snake'); setPage('Games') }}><span className="quick-game-icon snake-icon">◉</span><span><b>Snake</b><small>Beat your best score</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setRequestedGame('chess'); setPage('Games') }}><span className="quick-game-icon chess-icon">♟</span><span><b>Panda vs Spider</b><small>Chess · solo or online</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setRequestedGame('pen'); setPage('Games') }}><span className="quick-game-icon pen-icon">✎</span><span><b>Pen Fight</b><small>Physics · unlock 14 pens</small></span><ChevronRight size={15}/></button>
-              </div>
-              <div className="home-panel-foot"><div><BarChart3 size={15}/><span><b>Local insights</b><small>See what you play and explore</small></span></div><button onClick={() => setPage('Analytics')}>Open analytics <ArrowUpRight size={13}/></button></div>
-            </div>
+            <div className="home-launch-panel glass-panel overview-analytics"><AnalyticsDashboard title="Product analytics" subtitle="Interactive sample dashboard · switch ranges and export CSV." /></div>
           </section>
           <section className="stats-row studio-stats">
-            <div><span className="stat-label">MINI GAMES</span><b>03</b><small>Snake · Chess · Pen Fight</small></div>
-            <div><span className="stat-label">INDIAN PENS</span><b>14</b><small>Campaign unlocks and online picks</small></div>
-            <div><span className="stat-label">CHESS RULES</span><b className="stat-word">Full rules</b><small>Legal moves, check, and mate</small></div>
-            <div><span className="stat-label">ANALYTICS</span><b className="stat-word">Local</b><small>Stored only in this browser</small></div>
+            <div><span className="stat-label">COMPONENTS</span><b>15<span>+</span></b><small>Controls, surfaces, feedback and analytics</small></div>
+            <div><span className="stat-label">ANALYTICS UI</span><b className="stat-word">Interactive</b><small>Range selector, metrics, CSV export</small></div>
+            <div><span className="stat-label">DOCUMENTATION</span><b className="stat-word">API</b><small>Props, examples, implementation notes</small></div>
+            <div><span className="stat-label">LOCAL INSIGHTS</span><b className="stat-word">Private</b><small>Workspace activity stays in this browser</small></div>
           </section>
           <section className="section-block">
-            <div className="section-heading"><div><div className="section-kicker">COMPONENT STUDIO</div><h2>Useful pieces. <span>Ready to test.</span></h2><p className="section-description">The component library stays here, without a separate appearance-design section.</p></div><button className="view-all" onClick={() => setPage('Components')}>Browse components <ArrowRight size={15} /></button></div>
-            <div className="featured-grid">{components.slice(0, 4).map((c, i) =>
+            <div className="section-heading"><div><div className="section-kicker">COMPONENT STUDIO</div><h2>Useful pieces. <span>Ready to test.</span></h2><p className="section-description">Open a component to explore the live preview, API reference and copy-ready snippet.</p></div><button className="view-all" onClick={() => setPage('Components')}>Browse components <ArrowRight size={15} /></button></div>
+            <div className="featured-grid">{components.filter(c => ['analytics', 'button', 'card', 'progress'].includes(c.id)).map((c, i) =>
               <motion.button whileHover={{ y: -4 }} key={c.id} className={'featured-card feature-' + i} onClick={() => { setSelected(c.id); setPage('Playground') }}>
                 <div className="featured-card-top"><span className="component-index">0{i + 1}</span><span className="card-arrow"><ArrowUpRight size={15} /></span></div>
                 <div className="featured-preview"><MiniPreview id={c.id} /></div>
@@ -337,7 +329,6 @@ export default function App() {
           </section>
         </>}
         {page === 'Analytics' && <AnalyticsPanel onNavigate={destination => setPage(destination)} />}
-        {page === 'Games' && <GamesHub initialGame={requestedGame} initialRoom={initialRoom} />}
         {page === 'Components' && <section className="subpage">
           <div className="subpage-heading"><div className="section-kicker">THE LIBRARY</div><h1>Made to <span>compose.</span></h1><p>Explore the full collection of interactive liquid-glass building blocks.</p></div>
           <div className="library-toolbar"><GlassSearch placeholder="Search components…" value={search} onChange={setSearch} /><div className="category-pills">{categories.map(c => <button key={c} className={category === c ? 'active' : ''} onClick={() => setCategory(c)}>{c}</button>)}</div></div>
@@ -378,7 +369,7 @@ export default function App() {
             </div>
           </div>
         </section>}
-        <footer className="page-footer"><div className="footer-brand"><span className="brand-mark mini"><span /></span><span>SPIDERPANDA <small>CREATIVE LAB</small></span></div><span>Useful tools. Clear feedback. A little play.</span><button onClick={() => setPage('Games')}>Mini games <ArrowUpRight size={13} /></button></footer>
+        <footer className="page-footer"><div className="footer-brand"><span className="brand-mark mini"><span /></span><span>SPIDERPANDA <small>CREATIVE LAB</small></span></div><span>Useful components. Clear insights.</span><button onClick={() => setPage('Analytics')}>Activity <ArrowUpRight size={13} /></button></footer>
       </div>
     </main>
     <AnimatePresence>{toast && <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="global-toast"><Check size={16} /><span>Interaction complete — looking good.</span><button onClick={() => setToast(false)}><X size={14} /></button></motion.div>}</AnimatePresence>
