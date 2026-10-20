@@ -239,14 +239,17 @@ function ChessGame({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
   const [history,setHistory]=useState<string[]>([])
   const [lastMove,setLastMove]=useState<{from:Square;to:Square}|null>(null)
   const game=gameRef.current
+  const sessionStarted=useRef(false)
   const localColor: 'w'|'b'=mode==='multiplayer'&&api.room.role==='guest'?'b':'w'
   const isMulti=mode==='multiplayer'
   const resetGame=useCallback((notify=false)=>{
+    sessionStarted.current=false
     gameRef.current=new Chess();setPosition(gameRef.current.fen());setSelected(null);setHistory([]);setLastMove(null);setMessage('New match. Panda plays first.')
     if(notify)api.send({kind:'chess-reset',game:'chess'})
   },[api.send])
   const applyMove=useCallback((from:Square,to:Square,promotion='q',send=true)=>{
     try {
+      if(!sessionStarted.current){trackEvent('game_started','chess');sessionStarted.current=true}
       const move=gameRef.current.move({from,to,promotion})
       setPosition(gameRef.current.fen());setSelected(null);setHistory(gameRef.current.history());setLastMove({from,to})
       trackEvent('chess_move', 'panda-vs-spider')
@@ -263,7 +266,6 @@ function ChessGame({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
       applyMove(api.incoming.from as Square,api.incoming.to as Square,typeof api.incoming.promotion==='string'?api.incoming.promotion:'q',false)
     } else if(api.incoming.kind==='chess-reset') resetGame(false)
   },[api.incoming?._receivedAt,applyMove,resetGame])
-  useEffect(()=>{trackEvent('game_started','chess')},[])
   useEffect(()=>{
     if(isMulti||gameRef.current.turn()!=='b'||gameRef.current.isGameOver())return
     const timer=window.setTimeout(()=>{
@@ -319,6 +321,7 @@ function PenFight({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
   const [lastResult,setLastResult]=useState<'hit'|'miss'|null>(null)
   const canvasRef=useRef<HTMLCanvasElement|null>(null)
   const shotsRef=useRef<PenShot[]>([])
+  const sessionStarted=useRef(false)
   const scoreHandler=useRef<(side:'panda'|'spider')=>void>(()=>{})
   const launchHandler=useRef<(shot:{side:'panda'|'spider';angle:number;power:number;color:string})=>void>(()=>{})
   const currentRole=api.room.role
@@ -361,6 +364,7 @@ function PenFight({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
     if(isMulti&&!shot.remote&&!api.room.connected){setNotice('Connect to a friend first to launch in multiplayer.');return}
     const angleRad=shot.angle*Math.PI/180
     const direction=shot.side==='panda'?1:-1
+    if(!sessionStarted.current){trackEvent('game_started','pen');sessionStarted.current=true}
     shotsRef.current.push({x:shot.side==='panda'?52:728,y:264,vx:direction*Math.cos(angleRad)*shot.power,vy:-Math.sin(angleRad)*shot.power,side:shot.side,color:shot.color,age:0,resolved:false})
     setLastResult(null)
     if(!shot.remote&&isMulti)api.send({kind:'pen-launch',game:'pen',side:shot.side,angle:shot.angle,power:shot.power,color:shot.color})
@@ -377,7 +381,6 @@ function PenFight({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
       setScores({panda:api.incoming.panda,spider:api.incoming.spider});setNotice('Score updated by the room host.')
     }
   },[api.incoming?._receivedAt])
-  useEffect(()=>{trackEvent('game_started','pen')},[])
   useEffect(()=>{
     const canvas=canvasRef.current;if(!canvas)return
     const ctx=canvas.getContext('2d');if(!ctx)return
