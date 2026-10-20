@@ -1,6 +1,6 @@
 # SpiderPanda Creative Lab
 
-A React and TypeScript UI component library with interactive component previews, component-specific API docs, and reusable analytics UI building blocks.
+A React and TypeScript component library for refined glass UI, practical controls, live previews, and copy-ready examples.
 
 ## Run locally
 
@@ -32,21 +32,25 @@ https://soumyaranjan12.github.io/spider-liquid/
 
 ## Features
 
-- **19 reusable components**, including five analytics UI pieces: complete dashboard, KPI metric card, trend chart, traffic-source breakdown, and sortable analytics table.
-- **Overview shortcuts:** browse analytics building blocks without embedding the full analytics dashboard in the Overview page.
-- **Editable dashboard demo data:** maintain KPI values and percent changes, edit the selected trend series as comma-separated values, and change traffic-source counts. KPI cards, graph bars, and source percentages recalculate as you type.
-- **Local persistence:** analytics demo settings are stored in this browser under `spiderpanda.analytics-dashboard.v1`. Use **Reset demo** to restore default values.
-- **CSV export:** export the current range's trend values, KPI values, and traffic-source breakdown.
+- **19 reusable components** across controls, forms, surfaces, feedback, navigation, overlays, and analytics.
+- **Overview focused on the component library:** no dashboard preview. It highlights useful components across categories and links to the complete collection.
+- **Five editable analytics UI components:** complete Analytics Dashboard, metric card, trend chart, traffic-source breakdown, and analytics data table.
+- **Animated flip-to-edit UI:** click **Edit data** on any analytics component to flip it to its own editor; **Confirm & preview** saves your values and flips back to the updated component.
+- **Per-component browser persistence:** each analytics component saves its own demo data in local storage so you can revisit and edit values without affecting the other widgets.
+- **Live data visualizations:** edits to KPI values, trend points, source counts, and table rows are reflected in the preview once confirmed.
+- **CSV export** from the complete Analytics Dashboard.
 - **Interactive playground** with live component previews, import/JSX copy actions, and component-specific docs.
 
-The analytics widgets use illustrative demo data so they can be tested without a backend. Replace the demo configuration with your API data before using them for real reporting.
+The analytics widgets use illustrative demo data so they can be explored without a backend. Replace demo values with your API data before using them for real reporting.
 
 ## Project structure
 
 - `src/App.tsx`: overview, component library, playground, and documentation
+- `src/components/AnalyticsFlipCard.tsx`: shared animated flip-to-edit wrapper and confirm/persist interaction
 - `src/components/AnalyticsDashboard.tsx`: editable composed analytics dashboard
-- `src/components/AnalyticsComponents.tsx`: metric card, trend chart, source breakdown, and sortable table
+- `src/components/EditableAnalyticsPreviews.tsx`: editable metric card, trend chart, source breakdown, and data table previews
+- `src/components/AnalyticsComponents.tsx`: analytics UI building blocks
 - `src/components/GlassKit.tsx`: reusable UI primitives and live preview renderer
 - `src/data/components.ts`: component catalogue and examples
-- `src/styles.css`: theme, component visuals and responsive layout
+- `src/styles.css`: theme, component visuals, flip animation, and responsive layout
 - `.github/workflows/pages.yml`: automated GitHub Pages deployment
