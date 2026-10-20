@@ -258,6 +258,7 @@ export default function App() {
       accessibility: 'Uses a semantic HTML table and buttons inside headings to toggle sort direction.',
       notes: 'This component handles client-side sorting only. Fetch, filter, paginate, and validate records in the parent application when needed.'
     }
+  }
   const reference = componentReference[current.id] || componentReference.button
   const analyticsImports: Record<string, string> = {
     analytics: "import AnalyticsDashboard from './components/AnalyticsDashboard'",
