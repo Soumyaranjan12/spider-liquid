@@ -3,17 +3,17 @@ import AnalyticsFlipCard from './AnalyticsFlipCard'
 import { AnalyticsTable, MetricCard, TrafficSources, TrendChart, type AnalyticsColumn, type AnalyticsRow, type TrafficSource, type TrendPoint } from './AnalyticsComponents'
 
 type MetricConfig = { title:string; value:string; change:string; direction:'up'|'down'; caption:string }
-const metricDefaults:MetricConfig={title:'Monthly revenue',value:'24680',change:'8.4',direction:'up',caption:'vs previous month'}
+const metricDefaults:MetricConfig={title:'Monthly revenue',value:'$24,680',change:'8.4',direction:'up',caption:'vs previous month'}
 
 export function EditableMetricCard() {
   return <AnalyticsFlipCard<MetricConfig> name="Analytics Metric Card" storageKey="spiderpanda.metric-card.v1" defaults={metricDefaults}
-    renderPreview={data=><MetricCard title={data.title} value={data.title.toLowerCase().includes('revenue')?'$'+Number(data.value||0).toLocaleString('en-US'):Number(data.value||0).toLocaleString('en-US')} change={`${Number(data.change)>=0?'+':'−'}${Math.abs(Number(data.change)||0)}%`} direction={data.direction} caption={data.caption}/>}
+    renderPreview={data=><MetricCard title={data.title} value={data.value} change={`${Number(data.change)>=0?'+':'−'}${Math.abs(Number(data.change)||0)}%`} direction={data.direction} caption={data.caption}/>}
     renderEditor={(draft,setDraft)=><MetricEditor draft={draft} setDraft={setDraft}/>}
   />
 }
 function MetricEditor({draft,setDraft}:{draft:MetricConfig;setDraft:Dispatch<SetStateAction<MetricConfig>>}) {
   const field=(key:keyof MetricConfig,value:string)=>setDraft(previous=>({...previous,[key]:value}))
-  return <div className="afc-fields"><label>Metric title<input value={draft.title} onChange={e=>field('title',e.target.value)}/></label><label>Value<input type="number" min="0" step="any" value={draft.value} onChange={e=>field('value',e.target.value)}/></label><label>Change (%)<input type="number" step="any" value={draft.change} onChange={e=>field('change',e.target.value)}/></label><label>Comparison caption<input value={draft.caption} onChange={e=>field('caption',e.target.value)}/></label><label>Trend direction<select value={draft.direction} onChange={e=>field('direction',e.target.value as 'up'|'down')}><option value="up">Up</option><option value="down">Down</option></select></label><p className="afc-hint">The metric and comparison update in the preview after confirmation.</p></div>
+  return <div className="afc-fields"><label>Metric title<input value={draft.title} onChange={e=>field('title',e.target.value)}/></label><label>Value<input type="text" value={draft.value} onChange={e=>field('value',e.target.value)}/></label><label>Change (%)<input type="number" step="any" value={draft.change} onChange={e=>field('change',e.target.value)}/></label><label>Comparison caption<input value={draft.caption} onChange={e=>field('caption',e.target.value)}/></label><label>Trend direction<select value={draft.direction} onChange={e=>field('direction',e.target.value as 'up'|'down')}><option value="up">Up</option><option value="down">Down</option></select></label><p className="afc-hint">The metric and comparison update in the preview after confirmation.</p></div>
 }
 
 type TrendConfig = {title:string;labels:string;values:string;suffix:string}
