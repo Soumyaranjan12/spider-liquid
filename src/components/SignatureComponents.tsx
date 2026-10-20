@@ -30,11 +30,10 @@ export function MercurySwitch({ defaultChecked = true, label = 'Fluid motion' }:
   const [checked, setChecked] = useState(defaultChecked)
   const reduced = useReducedMotion()
   return <div className="sp-mercury-wrap">
-    <div className="sp-mercury-copy"><span className="sp-component-eyebrow">SYSTEM FEEL</span><strong>{label}</strong><small>{checked ? 'Spring physics enabled' : 'Motion kept quiet'}</small></div>
-    <button type="button" className={'sp-mercury-switch ' + (checked ? 'is-on' : '')} role="switch" aria-checked={checked} aria-label={label} onClick={() => setChecked(value => !value)}>
-      <motion.span className="sp-mercury-track" animate={{ backgroundColor: checked ? '#ff4859' : 'rgba(255,255,255,.12)' }} transition={{ duration: .24 }} />
-      <motion.span className="sp-mercury-thumb" animate={{ x: checked ? 34 : 4, scale: checked ? [1, 1.14, 1] : [1, .92, 1] }} transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 520, damping: 22 }}><span /></motion.span>
-      <span className="sp-mercury-orb" aria-hidden="true" />
+    <div className="sp-mercury-label"><span>{label}</span><small>{checked ? 'On' : 'Off'}</small></div>
+    <button type="button" className="sp-mercury-switch" role="switch" aria-checked={checked} aria-label={label} onClick={() => setChecked(value => !value)}>
+      <motion.span className="sp-mercury-track" animate={{ backgroundColor: checked ? '#ff4859' : 'rgba(255,255,255,.11)', borderColor: checked ? 'rgba(255,110,127,.72)' : 'rgba(255,255,255,.18)' }} transition={{ duration: .18 }} />
+      <motion.span className="sp-mercury-thumb" animate={{ x: checked ? 28 : 0, scale: checked ? [1, 1.17, .94, 1] : [1, .9, 1] }} transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 560, damping: 17, mass: .58 }} />
     </button>
   </div>
 }
