@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Activity, ArrowDownRight, ArrowUpRight, Download, Eye, MousePointer2, RotateCcw, Settings2, Users, X } from 'lucide-react'
+import { Activity, ArrowDownRight, ArrowUpRight, Download, Eye, MousePointer2, RotateCcw, Settings2, Users } from 'lucide-react'
 
 type Range = '7d' | '30d'
 type Metric = 'Visitors' | 'Engagement' | 'Conversion'
@@ -31,10 +31,10 @@ function createDefaultConfig(): DashboardConfig {
   return {
     '7d': {
       kpis: {
-        visitors:{value:'824',change:'12.8%'},
-        sessions:{value:'1248',change:'8.4%'},
-        engagement:{value:'68.4',change:'3.1%'},
-        conversion:{value:'4.82',change:'-0.6%'}
+        visitors:{value:'824',change:'12.8'},
+        sessions:{value:'1248',change:'8.4'},
+        engagement:{value:'68.4',change:'3.1'},
+        conversion:{value:'4.82',change:'-0.6'}
       },
       trends: {
         Visitors:'42, 58, 48, 78, 63, 91, 72',
@@ -45,10 +45,10 @@ function createDefaultConfig(): DashboardConfig {
     },
     '30d': {
       kpis: {
-        visitors:{value:'3502',change:'18.2%'},
-        sessions:{value:'5304',change:'11.9%'},
-        engagement:{value:'71.2',change:'4.8%'},
-        conversion:{value:'5.16',change:'-0.6%'}
+        visitors:{value:'3502',change:'18.2'},
+        sessions:{value:'5304',change:'11.9'},
+        engagement:{value:'71.2',change:'4.8'},
+        conversion:{value:'5.16',change:'-0.6'}
       },
       trends: {
         Visitors:'24, 37, 30, 45, 42, 58, 49, 64, 53, 74, 61, 84, 69, 92, 78, 67, 88, 72, 96, 76, 85, 70, 90, 78, 98, 81, 89, 74, 95, 86',
