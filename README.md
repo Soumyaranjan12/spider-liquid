@@ -1,12 +1,14 @@
-# SpiderPanda Liquid Glass UI
+# SpiderPanda Creative Lab
 
-A dark, Apple-inspired glass component library with SpiderPanda's obsidian and red identity. Built with React, TypeScript, Vite, Framer Motion, and Lucide icons.
+A browser-based creative hub for reusable React components, privacy-friendly analytics, and mini games. Built with React, TypeScript, Vite, and CSS.
 
 ## Run locally
 
-Requirements: Node.js 18+ and npm.
+Requirements: Node.js 20+ and npm.
 
 ```bash
+git clone https://github.com/Soumyaranjan12/spider-liquid.git
+cd spider-liquid
 npm install
 npm run dev
 ```
@@ -24,27 +26,32 @@ The static production output is generated in `dist/`.
 
 ## GitHub Pages
 
-This repo includes a GitHub Actions workflow that builds and deploys the app to GitHub Pages. In GitHub, open **Settings → Pages**, set **Build and deployment → Source** to **GitHub Actions**, then push to `main` or run the **Deploy to GitHub Pages** workflow manually. Once the workflow succeeds, the site will be at:
+GitHub Actions builds and deploys the static app. In repository **Settings → Pages**, set **Build and deployment → Source** to **GitHub Actions**. Pushing to `main` triggers a build and deployment.
 
 https://soumyaranjan12.github.io/spider-liquid/
 
 ## Features
 
-- Component documentation follows the selected live-preview component
-- Component API pages include props, usage guidance, example snippets, accessibility notes, and implementation caveats
-- Copy actions include a clipboard fallback and visible success/failure feedback
-- 14-component showcase and category filtering
-- Interactive playground with backdrop, transparency and palette controls
-- Eight preset accent palettes plus custom color
-- Reliable copy actions, component-specific API docs, prop references, examples and accessibility notes
-- Responsive layout, keyboard focus styling, and reduced-motion support
+- **Games:** Snake with saved personal best, panda-vs-spider chess with legal move validation and a lightweight single-player opponent, and a physics-based Pen Fight arena.
+- **Pen Fight campaign:** 14 familiar Indian stationery pen designs; earn three direct-hit points to clear each level and unlock/equip the next pen.
+- **Online games:** shareable room links and peer-to-peer move/score synchronization using PeerJS/WebRTC. Multiplayer depends on browser WebRTC/network connectivity; PeerJS Cloud provides signaling, not a hosted game database.
+- **Analytics:** local activity event timeline, component visits, game starts, chess moves, Snake points, Pen Fight points and levels. Data remains in local browser storage.
+- **Component studio:** interactive component previews, copyable import/JSX, selected-component API documentation, props, examples, implementation notes and accessibility notes.
+- Responsive layout and keyboard support.
 
-## Project layout
+## Project structure
 
-- `src/App.tsx`: overview, components page, playground and documentation
-- `src/components/GlassKit.tsx`: reusable glass components
+- `src/App.tsx`: overview, navigation, component library, playground and docs
+- `src/components/GamesHub.tsx`: Snake, themed chess, online room UI, Pen Fight physics and campaign
+- `src/components/AnalyticsPanel.tsx`: local analytics dashboard
+- `src/components/GlassKit.tsx`: reusable component primitives
 - `src/data/components.ts`: component catalogue and examples
-- `src/styles.css`: design tokens, liquid glass effects and responsive styling
-- `.github/workflows/pages.yml`: GitHub Pages deployment workflow
+- `src/utils/analytics.ts`: privacy-friendly local tracking helpers
+- `src/styles.css`: global styles, responsive layout and game styles
+- `.github/workflows/pages.yml`: automated GitHub Pages deployment
 
-No backend, account, API key, or environment variables required.
+## Multiplayer notes
+
+The match creator generates a room ID and a link to the selected game. The joining player opens that link and connects through PeerJS Cloud signaling. After setup, moves and shot events are shared peer-to-peer. Some network combinations may prevent WebRTC from connecting; a relay/TURN service or a self-hosted signaling setup may be required for broader reliability.
+
+No application database or paid API is configured. Analytics and campaign unlocks are stored in the local browser, not synced between devices.
