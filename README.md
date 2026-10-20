@@ -1,6 +1,6 @@
 # SpiderPanda Creative Lab
 
-A browser-based creative hub for reusable React components, privacy-friendly analytics, and mini games. Built with React, TypeScript, Vite, and CSS.
+A React and TypeScript component studio with an interactive Analytics Dashboard, copy-ready examples, documentation, and privacy-friendly local workspace activity insights.
 
 ## Run locally
 
@@ -32,26 +32,21 @@ https://soumyaranjan12.github.io/spider-liquid/
 
 ## Features
 
-- **Games:** Snake with saved personal best, panda-vs-spider chess with legal move validation and a lightweight single-player opponent, and a physics-based Pen Fight arena.
-- **Pen Fight campaign:** 14 familiar Indian stationery pen designs; earn three direct-hit points to clear each level and unlock/equip the next pen.
-- **Online games:** shareable room links and peer-to-peer move/score synchronization using PeerJS/WebRTC. Multiplayer depends on browser WebRTC/network connectivity; PeerJS Cloud provides signaling, not a hosted game database.
-- **Analytics:** local activity event timeline, component visits, game starts, chess moves, Snake points, Pen Fight points and levels. Data remains in local browser storage.
-- **Component studio:** interactive component previews, copyable import/JSX, selected-component API documentation, props, examples, implementation notes and accessibility notes.
-- Responsive layout and keyboard support.
+- **Analytics Dashboard component:** interactive KPI cards, 7-day/30-day range, metric selector, traffic-source breakdown and CSV export.
+- **Component studio:** browse 15 reusable components, interact with live previews, copy imports and JSX, and view component-specific API documentation.
+- **Workspace analytics page:** local seven-day activity chart, page views, component previews, code copies, top components, latest events, and a clear-history action.
+- **Private local history:** activity records remain in browser storage and are not sent to an analytics service.
+- Responsive layout, visible keyboard focus, and reduced-motion support.
+
+The Analytics Dashboard component uses illustrative demo data so it works without a backend. Replace its sample series with your own source before using it for business reporting.
 
 ## Project structure
 
-- `src/App.tsx`: overview, navigation, component library, playground and docs
-- `src/components/GamesHub.tsx`: Snake, themed chess, online room UI, Pen Fight physics and campaign
-- `src/components/AnalyticsPanel.tsx`: local analytics dashboard
-- `src/components/GlassKit.tsx`: reusable component primitives
+- `src/App.tsx`: overview, component library, playground, docs and local analytics page
+- `src/components/AnalyticsDashboard.tsx`: reusable interactive analytics component
+- `src/components/AnalyticsPanel.tsx`: local workspace activity dashboard
+- `src/components/GlassKit.tsx`: reusable component primitives and live preview renderer
 - `src/data/components.ts`: component catalogue and examples
 - `src/utils/analytics.ts`: privacy-friendly local tracking helpers
-- `src/styles.css`: global styles, responsive layout and game styles
+- `src/styles.css`: theme, component visuals and responsive layout
 - `.github/workflows/pages.yml`: automated GitHub Pages deployment
-
-## Multiplayer notes
-
-The match creator generates a room ID and a link to the selected game. The joining player opens that link and connects through PeerJS Cloud signaling. After setup, moves and shot events are shared peer-to-peer. Some network combinations may prevent WebRTC from connecting; a relay/TURN service or a self-hosted signaling setup may be required for broader reliability.
-
-No application database or paid API is configured. Analytics and campaign unlocks are stored in the local browser, not synced between devices.
