@@ -312,7 +312,7 @@ function PenFight({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
   const [mode,setMode]=useState<GameMode>(initialRoom?'multiplayer':'single')
   const [level,setLevel]=useState(1)
   const [progress,setProgress]=useState(0)
-  const [unlocked,setUnlocked]=useState(()=>{try{return Number(localStorage.getItem('spiderpanda.pen.unlocked')||1)}catch{return 1}})
+  const [unlocked,setUnlocked]=useState(()=>{try{return Math.min(pens.length,Math.max(1,Number(localStorage.getItem('spiderpanda.pen.unlocked')||1)))}catch{return 1}})
   const [selectedPen,setSelectedPen]=useState(0)
   const [angle,setAngle]=useState(28)
   const [power,setPower]=useState(11)
@@ -323,7 +323,7 @@ function PenFight({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
   const shotsRef=useRef<PenShot[]>([])
   const sessionStarted=useRef(false)
   const scoreHandler=useRef<(side:'panda'|'spider')=>void>(()=>{})
-  const launchHandler=useRef<(shot:{side:'panda'|'spider';angle:number;power:number;color:string})=>void>(()=>{})
+  const launchHandler=useRef<(shot:{side:'panda'|'spider';angle:number;power:number;color:string;remote?:boolean})=>void>(()=>{})
   const currentRole=api.room.role
   const isMulti=mode==='multiplayer'
   const playerSide:'panda'|'spider'=isMulti&&currentRole==='guest'?'spider':'panda'
