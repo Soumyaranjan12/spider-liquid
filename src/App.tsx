@@ -1,36 +1,30 @@
-import { useMemo, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Activity, ArrowRight, ArrowUpRight, BookOpen, Check, Code2, Copy, Droplets,
-  Github, Layers3, Menu, Palette, Search, Settings2, Sparkles, X, Zap
+  Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, Code2, Copy,
+  Gamepad2, Github, Layers3, Menu, Search, Settings2, Sparkles, Trophy, X
 } from 'lucide-react'
 import { components } from './data/components'
+import AnalyticsPanel from './components/AnalyticsPanel'
+import GamesHub, { type MiniGameId } from './components/GamesHub'
+import { trackEvent } from './utils/analytics'
 import { GlassBadge, GlassButton, GlassCard, GlassSearch, PlaygroundSample } from './components/GlassKit'
 
-type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation'
-const palettes = [
-  { name: 'SpiderPanda', accent: '#ff414d' },
-  { name: 'Arctic', accent: '#7dd3fc' },
-  { name: 'Ultraviolet', accent: '#b49aff' },
-  { name: 'Emerald', accent: '#52e0ae' },
-  { name: 'Solar', accent: '#ffbd69' },
-  { name: 'Rose', accent: '#ff8fbd' },
-  { name: 'Cobalt', accent: '#6e9cff' },
-  { name: 'Lime', accent: '#c4f36b' }
-]
+type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation' | 'Analytics' | 'Games'
 const categories = ['All components', 'Controls', 'Forms', 'Surfaces', 'Feedback', 'Navigation', 'Overlays']
 const docsSnippet = "import { GlassButton, GlassCard, GlassToggle } from './components/GlassKit'\n\nexport function Example() {\n  return (\n    <GlassCard>\n      <h2>Welcome back</h2>\n      <p>Beautiful interfaces, with a little depth.</p>\n      <GlassButton variant=\"primary\">Continue</GlassButton>\n    </GlassCard>\n  )\n}"
 
 export default function App() {
-  const [page, setPage] = useState<Page>('Overview')
+  const initialParams = new URLSearchParams(window.location.search)
+  const [page, setPage] = useState<Page>(() => initialParams.get('game') === 'games' ? 'Games' : 'Overview')
+  const [requestedGame, setRequestedGame] = useState<MiniGameId>(() => {
+    const query = initialParams.get('mini')
+    return query === 'chess' || query === 'pen' ? query : 'snake'
+  })
+  const initialRoom = initialParams.get('room') || ''
   const [selected, setSelected] = useState('button')
   const [category, setCategory] = useState('All components')
   const [search, setSearch] = useState('')
-  const [palette, setPalette] = useState(palettes[0])
-  const [customAccent, setCustomAccent] = useState('#ff414d')
-  const [customOpen, setCustomOpen] = useState(false)
-  const [glass, setGlass] = useState(58)
-  const [backdrop, setBackdrop] = useState('aurora')
   const [copied, setCopied] = useState('')
   const [toast, setToast] = useState(false)
   const [mobileNav, setMobileNav] = useState(false)
@@ -219,7 +213,6 @@ export default function App() {
     setPage('Documentation')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  const accent = customOpen ? customAccent : palette.accent
   const filtered = useMemo(
     () => components.filter(c => (category === 'All components' || c.category === category) && (c.name + ' ' + c.description).toLowerCase().includes(search.toLowerCase())),
     [category, search]
@@ -260,27 +253,22 @@ export default function App() {
     setToast(true)
     window.setTimeout(() => setToast(false), 2600)
   }
+  useEffect(() => { trackEvent('page_view', page) }, [page])
+  useEffect(() => { if (page === 'Playground') trackEvent('component_preview', selected) }, [page, selected])
   const navItems = [
     { label: 'Overview' as Page, icon: Layers3 },
+    { label: 'Analytics' as Page, icon: BarChart3 },
+    { label: 'Games' as Page, icon: Gamepad2 },
     { label: 'Components' as Page, icon: Sparkles },
-    { label: 'Playground' as Page, icon: Settings2 },
+    { label: 'Playground' as Page, icon: Code2 },
     { label: 'Documentation' as Page, icon: BookOpen }
   ]
 
-  return <div className={'app-shell backdrop-' + backdrop} style={{
-    '--accent': accent, '--accent-rgb': hexToRgb(accent),
-    '--glass-opacity': glass / 100,
-    '--glass-fill': ((100 - glass) / 100) * 0.22 + 0.035,
-    '--glass-fill-soft': ((100 - glass) / 100) * 0.09 + 0.015,
-    '--glass-fill-strong': ((100 - glass) / 100) * 0.32 + 0.08,
-    '--glass-fill-dark': ((100 - glass) / 100) * 0.3 + 0.03,
-    '--glass-accent-fill': 0.9 - (glass / 100) * 0.5,
-    '--glass-accent-fill-soft': 0.72 - (glass / 100) * 0.4
-  } as CSSProperties}>
+  return <div className="app-shell">
     <div className="ambient ambient-one" /><div className="ambient ambient-two" /><div className="ambient ambient-three" />
     <aside className={'sidebar ' + (mobileNav ? 'sidebar-open' : '')}>
       <button className="brand" onClick={() => setPage('Overview')} aria-label="SpiderPanda home">
-        <span className="brand-mark"><span /></span><span className="brand-text">spiderpanda<span>LIQUID GLASS</span></span>
+        <span className="brand-mark"><span /></span><span className="brand-text">spiderpanda<span>CREATIVE LAB</span></span>
       </button>
       <div className="side-caption">WORKSPACE</div>
       <nav className="side-nav">{navItems.map(({ label, icon: Icon }) =>
@@ -288,13 +276,13 @@ export default function App() {
           <Icon size={17} strokeWidth={1.8} /><span>{label}</span>{label === 'Components' && <small>14</small>}
         </button>
       )}</nav>
-      <div className="side-caption side-caption-spaced">LIBRARY</div>
+      <div className="side-caption side-caption-spaced">COMPONENTS</div>
       <div className="side-nav compact">{categories.slice(1).map((name, i) =>
         <button key={name} onClick={() => { setCategory(name); setPage('Components') }}><span className={'category-dot dot-' + i} />{name}</button>
       )}</div>
       <div className="sidebar-bottom">
-        <button className="version-card" onClick={() => { setPage('Documentation'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}><div className="version-icon"><BookOpen size={15} /></div><div><b>Component API & docs</b><p>Props, examples, accessibility</p></div><ArrowUpRight size={14} /></button>
-        <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Design system</span></div><button aria-label="Settings" onClick={() => setPage('Playground')}><Settings2 size={16} /></button></div>
+        <button className="version-card" onClick={() => setPage('Games')}><div className="version-icon"><Gamepad2 size={15} /></div><div><b>Take a break</b><p>Snake · Chess · Pen Fight</p></div><ArrowUpRight size={14} /></button>
+        <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Creative lab</span></div><button aria-label="Open analytics" onClick={() => setPage('Analytics')}><BarChart3 size={16} /></button></div>
       </div>
     </aside>
     {mobileNav && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileNav(false)} />}
@@ -302,37 +290,39 @@ export default function App() {
       <header className="topbar">
         <button className="mobile-menu" onClick={() => setMobileNav(!mobileNav)} aria-label="Toggle menu"><Menu size={20} /></button>
         <div className="breadcrumbs"><span>SpiderPanda</span><span className="crumb-slash">/</span><b>{page}</b></div>
-        <div className="top-actions"><span className="live-status"><i /> All systems smooth</span>
+        <div className="top-actions">
           <a className="top-icon" href="https://github.com/Soumyaranjan12/spider-liquid" target="_blank" rel="noreferrer" aria-label="GitHub repository"><Github size={17} /></a>
-          <button className="top-code" onClick={() => setPage('Documentation')}><Code2 size={15} /> Get started <ArrowUpRight size={14} /></button>
+          <button className="top-code" onClick={() => setPage('Analytics')}><BarChart3 size={15} /> Your activity <ArrowUpRight size={14} /></button>
         </div>
       </header>
       <div className="page-content">
         {page === 'Overview' && <>
-          <section className="hero-section">
+          <section className="hero-section studio-hero">
             <div className="hero-copy">
-              <div className="eyebrow-line"><span className="eyebrow-icon"><Sparkles size={13} /></span> A COMPONENT LIBRARY WITH DEPTH <span className="eyebrow-rule" /></div>
-              <h1>Interfaces that<br />feel <span className="gradient-word">alive.</span></h1>
-              <p className="hero-subtitle">Meet Liquid Glass — a thoughtful collection of translucent, tactile components made for the next generation of web experiences.</p>
-              <div className="hero-actions"><GlassButton variant="primary" onClick={() => setPage('Playground')}>Explore the playground <ArrowRight size={16} /></GlassButton><button className="text-button" onClick={() => setPage('Documentation')}>Read the docs <ArrowUpRight size={15} /></button></div>
-              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>✳</span></div><span><b>14 crafted components</b><br />One cohesive design language</span></div>
+              <div className="eyebrow-line"><span className="eyebrow-icon"><Activity size={13} /></span> PLAY · BUILD · ANALYSE <span className="eyebrow-rule" /></div>
+              <h1>Your next idea<br />starts <span className="gradient-word">here.</span></h1>
+              <p className="hero-subtitle">A practical creative lab for interactive components, local activity insights, and mini games. No decorative controls pretending to do a job.</p>
+              <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setRequestedGame('snake'); setPage('Games') }}>Launch a game <Gamepad2 size={16} /></GlassButton><button className="text-button" onClick={() => setPage('Analytics')}>View analytics <ArrowUpRight size={15} /></button></div>
+              <div className="hero-proof"><div className="proof-avatars"><span>🐼</span><span>🕷️</span><span>✎</span></div><span><b>3 mini games · 14 pen classics</b><br />Single player and invite-link multiplayer</span></div>
             </div>
-            <div className="hero-art" aria-label="Abstract liquid glass artwork">
-              <div className="orbit orbit-a" /><div className="orbit orbit-b" /><div className="orb-shadow" />
-              <div className="glass-orb"><div className="orb-glint" /><div className="orb-core" /><div className="orb-shard shard-one" /><div className="orb-shard shard-two" /><div className="orb-rim" /></div>
-              <div className="orb-label label-top"><span className="label-dot" /> REAL-TIME LIGHT <ArrowUpRight size={12} /></div>
-              <div className="orb-label label-bottom"><Droplets size={13} /> REFRACTIVE BY NATURE</div>
-              <div className="float-chip"><span className="float-chip-icon"><Layers3 size={15} /></span><span><b>Layered surfaces</b><small>Depth, without the noise</small></span><span className="chip-spark">✳</span></div>
+            <div className="home-launch-panel glass-panel">
+              <div className="home-panel-top"><div><span className="mini-label">QUICK LAUNCH</span><h2>Choose your mode</h2></div><span className="home-panel-live"><i/> Ready</span></div>
+              <div className="quick-game-grid">
+                <button onClick={() => { setRequestedGame('snake'); setPage('Games') }}><span className="quick-game-icon snake-icon">◉</span><span><b>Snake</b><small>Beat your best score</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setRequestedGame('chess'); setPage('Games') }}><span className="quick-game-icon chess-icon">♟</span><span><b>Panda vs Spider</b><small>Chess · solo or online</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setRequestedGame('pen'); setPage('Games') }}><span className="quick-game-icon pen-icon">✎</span><span><b>Pen Fight</b><small>Physics · unlock 14 pens</small></span><ChevronRight size={15}/></button>
+              </div>
+              <div className="home-panel-foot"><div><BarChart3 size={15}/><span><b>Local insights</b><small>See what you play and explore</small></span></div><button onClick={() => setPage('Analytics')}>Open analytics <ArrowUpRight size={13}/></button></div>
             </div>
           </section>
-          <section className="stats-row">
-            <div><span className="stat-label">COMPONENTS</span><b>14<span>+</span></b><small>Ready to compose</small></div>
-            <div><span className="stat-label">THEME PRESETS</span><b>08</b><small>Plus custom color</small></div>
-            <div><span className="stat-label">DEPENDENCIES</span><b>03</b><small>React · Motion · Icons</small></div>
-            <div><span className="stat-label">DESIGN INTENT</span><b className="stat-word">Clarity<span> × </span>Depth</b><small>Subtle, not shouty</small></div>
+          <section className="stats-row studio-stats">
+            <div><span className="stat-label">MINI GAMES</span><b>03</b><small>Snake · Chess · Pen Fight</small></div>
+            <div><span className="stat-label">INDIAN PENS</span><b>14</b><small>Campaign unlocks and online picks</small></div>
+            <div><span className="stat-label">CHESS RULES</span><b className="stat-word">Full rules</b><small>Legal moves, check, and mate</small></div>
+            <div><span className="stat-label">ANALYTICS</span><b className="stat-word">Local</b><small>Stored only in this browser</small></div>
           </section>
           <section className="section-block">
-            <div className="section-heading"><div><div className="section-kicker">THE COLLECTION</div><h2>Small details. <span>Big feeling.</span></h2></div><button className="view-all" onClick={() => setPage('Components')}>View all components <ArrowRight size={15} /></button></div>
+            <div className="section-heading"><div><div className="section-kicker">COMPONENT STUDIO</div><h2>Useful pieces. <span>Ready to test.</span></h2><p className="section-description">The component library stays here, without a separate appearance-design section.</p></div><button className="view-all" onClick={() => setPage('Components')}>Browse components <ArrowRight size={15} /></button></div>
             <div className="featured-grid">{components.slice(0, 4).map((c, i) =>
               <motion.button whileHover={{ y: -4 }} key={c.id} className={'featured-card feature-' + i} onClick={() => { setSelected(c.id); setPage('Playground') }}>
                 <div className="featured-card-top"><span className="component-index">0{i + 1}</span><span className="card-arrow"><ArrowUpRight size={15} /></span></div>
@@ -341,11 +331,9 @@ export default function App() {
               </motion.button>
             )}</div>
           </section>
-          <section className="section-block theme-section">
-            <div className="section-heading"><div><div className="section-kicker">MAKE IT YOURS</div><h2>One system. <span>Your colors.</span></h2><p className="section-description">Every surface responds to your palette. Try a preset or dial in your own accent.</p></div><div className="palette-count"><Palette size={16} /> 08 presets</div></div>
-            <PalettePanel palette={palette} setPalette={setPalette} customOpen={customOpen} setCustomOpen={setCustomOpen} customAccent={customAccent} setCustomAccent={setCustomAccent} />
-          </section>
         </>}
+        {page === 'Analytics' && <AnalyticsPanel onNavigate={destination => setPage(destination)} />}
+        {page === 'Games' && <GamesHub initialGame={requestedGame} initialRoom={initialRoom} />}
         {page === 'Components' && <section className="subpage">
           <div className="subpage-heading"><div className="section-kicker">THE LIBRARY</div><h1>Made to <span>compose.</span></h1><p>Explore the full collection of interactive liquid-glass building blocks.</p></div>
           <div className="library-toolbar"><GlassSearch placeholder="Search components…" value={search} onChange={setSearch} /><div className="category-pills">{categories.map(c => <button key={c} className={category === c ? 'active' : ''} onClick={() => setCategory(c)}>{c}</button>)}</div></div>
@@ -353,22 +341,15 @@ export default function App() {
           {filtered.length === 0 && <div className="empty-state glass-panel"><Search size={24} /><h3>No components found</h3><p>Try another search or select a different category.</p><button onClick={() => { setSearch(''); setCategory('All components') }}>Clear filters</button></div>}
         </section>}
         {page === 'Playground' && <section className="subpage playground-page">
-          <div className="subpage-heading compact-heading"><div className="section-kicker">LIVE LABORATORY</div><h1>Dial in the <span>details.</span></h1><p>Change the material, pick a component and copy the snippet straight into your project.</p></div>
+          <div className="subpage-heading compact-heading"><div className="section-kicker">LIVE LABORATORY</div><h1>Test it in the <span>studio.</span></h1><p>Choose a component, try its interactive preview, and copy the import plus JSX example.</p></div>
           <div className="playground-layout">
             <aside className="playground-list glass-panel"><div className="panel-heading"><div><b>Components</b><p>Choose a preview</p></div><span className="list-count">14</span></div><GlassSearch placeholder="Filter components…" value={search} onChange={setSearch} /><div className="playground-items">{components.filter(c => (c.name + c.category).toLowerCase().includes(search.toLowerCase())).map(c => <button key={c.id} className={selected === c.id ? 'active' : ''} onClick={() => setSelected(c.id)}><span className="item-icon"><Code2 size={15} /></span><span>{c.name}<small>{c.category}</small></span>{selected === c.id && <span className="item-active-dot" />}</button>)}</div></aside>
             <div className="playground-main">
               <div className="preview-panel glass-panel"><div className="preview-panel-head"><div><span className="mini-label">LIVE PREVIEW</span><h3>{current.name}</h3></div><div className="preview-head-actions"><GlassBadge tone="success">Interactive</GlassBadge><button type="button" className="top-icon copy-preview-button" aria-label={copied === 'Component code copied' ? 'Component code copied' : 'Copy component code'} title={copied === 'Component code copied' ? 'Copied to clipboard' : 'Copy component code'} onClick={() => copy(componentSnippet, 'Component code copied')}>{copied === 'Component code copied' ? <Check size={15} /> : <Copy size={15} />}</button></div></div>
-                <div className={'live-stage stage-' + backdrop}><div className="stage-glow" /><div className="stage-content"><PlaygroundSample key={selected} id={selected} onToast={showToast} /></div><span className="stage-caption"><span /> POINTER-READY SURFACE</span></div>
+                <div className="live-stage stage-aurora"><div className="stage-glow" /><div className="stage-content"><PlaygroundSample key={selected} id={selected} onToast={showToast} /></div><span className="stage-caption"><span /> POINTER-READY SURFACE</span></div>
                 <div className="preview-panel-foot"><span><i /> Live component</span><span>Preview is illustrative</span></div>
               </div>
-              <div className="playground-controls glass-panel"><div className="panel-heading"><div><b>Appearance</b><p>Adjust the material properties</p></div><Settings2 size={17} /></div>
-                <label className="control-label">Backdrop</label><div className="backdrop-options">{[{ id: 'aurora', name: 'Aurora' }, { id: 'mesh', name: 'Mesh' }, { id: 'plain', name: 'Plain' }].map(b => <button key={b.id} className={'backdrop-option backdrop-' + b.id + (backdrop === b.id ? ' active' : '')} onClick={() => setBackdrop(b.id)}><span />{b.name}</button>)}</div>
-                <label className="slider-control"><span>Transparency <b>{glass}%</b></span><input type="range" min="15" max="90" value={glass} onChange={e => setGlass(Number(e.target.value))} /></label>
-                <div className="control-divider" /><label className="control-label">Accent palette</label>
-                <div className="compact-palettes">{palettes.map(p => <button key={p.name} title={p.name} aria-label={p.name} className={palette.name === p.name && !customOpen ? 'active' : ''} style={{ background: p.accent }} onClick={() => { setPalette(p); setCustomOpen(false) }} />)}<button className="custom-color-dot" title="Custom color" onClick={() => setCustomOpen(!customOpen)}><Palette size={13} /></button></div>
-                {customOpen && <label className="inline-color">Custom accent <input type="color" value={customAccent} onChange={e => setCustomAccent(e.target.value)} /></label>}
-              </div>
-              <div className="code-panel glass-panel"><div className="code-panel-head"><div><span className="mini-label">QUICK START</span><b>React + TypeScript</b></div><button className="copy-button" onClick={() => copy(current.code, 'Component code copied')}>{copied === 'Component code copied' ? <Check size={14} /> : <Copy size={14} />} {copied === 'Component code copied' ? 'Copied' : 'Copy code'}</button></div><pre><code>{current.code}</code></pre><div className="code-panel-foot"><span><span className="code-dot" /> TSX</span><button onClick={openComponentDocs}>View API & usage <ArrowUpRight size={13} /></button></div></div>
+              <div className="code-panel glass-panel"><div className="code-panel-head"><div><span className="mini-label">QUICK START</span><b>React + TypeScript</b></div><button className="copy-button" onClick={() => copy(componentSnippet, 'Component code copied')}>{copied === 'Component code copied' ? <Check size={14} /> : <Copy size={14} />} {copied === 'Component code copied' ? 'Copied' : 'Copy code'}</button></div><pre><code>{componentSnippet}</code></pre><div className="code-panel-foot"><span><span className="code-dot" /> TSX</span><button onClick={openComponentDocs}>View API & usage <ArrowUpRight size={13} /></button></div></div>
             </div>
           </div>
         </section>}
@@ -387,13 +368,13 @@ export default function App() {
             <div className="docs-content">
               <article id="install" className="docs-article"><span className="article-number">01 / GET STARTED</span><h2>Installation</h2><p>Start with a modern React app. This project uses Vite, TypeScript, Framer Motion, and Lucide icons.</p><div className="code-block"><div><span>TERMINAL</span><button onClick={() => copy('npm install\nnpm run dev', 'Install commands copied')}>{copied === 'Install commands copied' ? <Check size={14} /> : <Copy size={14} />} Copy</button></div><pre><code>{'npm install\nnpm run dev'}</code></pre></div></article>
               <article id="usage" className="docs-article"><span className="article-number">02 / COMPOSE</span><h2>Use a component</h2><p>Components are deliberately small. Compose them with your own content and keep application state in your app.</p><div className="code-block"><div><span>EXAMPLE.TSX</span><button onClick={() => copy(docsSnippet, 'Example snippet copied')}>{copied === 'Example snippet copied' ? <Check size={14} /> : <Copy size={14} />} Copy</button></div><pre><code>{docsSnippet}</code></pre></div><GlassButton variant="primary" onClick={() => setPage('Playground')}>Try it in the playground <ArrowRight size={15} /></GlassButton></article>
-              <article id="tokens" className="docs-article"><span className="article-number">03 / THE FOUNDATION</span><h2>Design tokens</h2><p>Use CSS custom properties to tune the material without rewriting component styles.</p><div className="token-list"><div><span className="token-swatch token-black" /><span><b>--surface</b><small>Primary canvas</small></span><code>#09090B</code></div><div><span className="token-swatch" style={{ background: accent }} /><span><b>--accent</b><small>Interactive highlight</small></span><code>{accent.toUpperCase()}</code></div><div><span className="token-swatch token-glass" /><span><b>--glass-opacity</b><small>Surface translucency</small></span><code>{(glass / 100).toFixed(2)}</code></div></div></article>
+              <article id="tokens" className="docs-article"><span className="article-number">03 / THE FOUNDATION</span><h2>Design tokens</h2><p>Use CSS custom properties to tune the material without rewriting component styles.</p><div className="token-list"><div><span className="token-swatch token-black" /><span><b>--surface</b><small>Primary canvas</small></span><code>#09090B</code></div><div><span className="token-swatch" style={{background:'#ff414d'}} /><span><b>--accent</b><small>SpiderPanda action color</small></span><code>#FF414D</code></div><div><span className="token-swatch token-glass" /><span><b>--glass-fill</b><small>Translucent surface highlight</small></span><code>RGBA</code></div></div></article>
               <article id="principles" className="docs-article"><span className="article-number">04 / MATERIAL LOGIC</span><h2>Glass with restraint</h2><div className="principle-grid"><div><Droplets size={18} /><b>Layer, don't stack</b><p>Use blur where it adds depth. Too many overlapping glass layers make interfaces muddy.</p></div><div><Activity size={18} /><b>Keep contrast</b><p>Pair translucent surfaces with clear text, deliberate edges, and readable states.</p></div><div><Sparkles size={18} /><b>Light with purpose</b><p>Use accent glow to guide attention, not as a permanent outline on everything.</p></div></div></article>
               <article id="accessibility" className="docs-article"><span className="article-number">05 / INCLUSIVE BY DEFAULT</span><h2>Accessibility</h2><ul className="docs-list"><li>Keep keyboard focus visible; don't rely on color alone to communicate state.</li><li>Use semantic buttons and labeled inputs for controls.</li><li>Respect <code>prefers-reduced-motion</code> and avoid essential information in animation.</li><li>Test glass surfaces against the actual backgrounds where they will be used.</li></ul><div className="note-callout"><Activity size={17} /><p><b>Browser note</b><br />Glass uses <code>backdrop-filter</code> when supported. Browsers without it fall back to a more opaque surface for legibility.</p></div></article>
             </div>
           </div>
         </section>}
-        <footer className="page-footer"><div className="footer-brand"><span className="brand-mark mini"><span /></span><span>SPIDERPANDA <small>LIQUID GLASS UI</small></span></div><span>Made with intention, shipped with a little glow.</span><button onClick={() => setPage('Documentation')}>Documentation <ArrowUpRight size={13} /></button></footer>
+        <footer className="page-footer"><div className="footer-brand"><span className="brand-mark mini"><span /></span><span>SPIDERPANDA <small>CREATIVE LAB</small></span></div><span>Useful tools. Clear feedback. A little play.</span><button onClick={() => setPage('Games')}>Mini games <ArrowUpRight size={13} /></button></footer>
       </div>
     </main>
     <AnimatePresence>{toast && <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="global-toast"><Check size={16} /><span>Interaction complete — looking good.</span><button onClick={() => setToast(false)}><X size={14} /></button></motion.div>}</AnimatePresence>
@@ -401,12 +382,6 @@ export default function App() {
   </div>
 }
 
-function PalettePanel({ palette, setPalette, customOpen, setCustomOpen, customAccent, setCustomAccent }: {
-  palette: typeof palettes[number]; setPalette: (v: typeof palettes[number]) => void;
-  customOpen: boolean; setCustomOpen: (v: boolean) => void; customAccent: string; setCustomAccent: (v: string) => void
-}) {
-  return <div className="palette-panel glass-panel"><div className="palette-swatches">{palettes.map(p => <button key={p.name} className={'palette-swatch ' + (palette.name === p.name && !customOpen ? 'active' : '')} onClick={() => { setPalette(p); setCustomOpen(false) }} title={p.name} style={{ '--swatch': p.accent } as CSSProperties}><span /><small>{p.name}</small></button>)}<button className={'palette-swatch custom-swatch ' + (customOpen ? 'active' : '')} onClick={() => setCustomOpen(!customOpen)} title="Custom palette"><span><Palette size={17} /></span><small>Custom</small></button></div>{customOpen && <div className="custom-color-row"><label>Accent color <input type="color" value={customAccent} onChange={e => setCustomAccent(e.target.value)} /></label><code>{customAccent.toUpperCase()}</code><button onClick={() => setCustomAccent('#ff414d')}>Reset</button></div>}</div>
-}
 function MiniPreview({ id }: { id: string }) {
   if (id === 'button') return <div className="mini-buttons"><span className="mini-primary">Continue <ArrowUpRight size={11} /></span><span className="mini-secondary">Cancel</span></div>
   if (id === 'icon-button') return <div className="mini-icon-buttons"><span><Settings2 size={15} /></span><span><X size={15} /></span><span><Check size={15} /></span></div>
@@ -422,9 +397,4 @@ function MiniPreview({ id }: { id: string }) {
   if (id === 'avatar') return <div className="mini-avatars"><i>SP</i><i>AL</i><i>MK</i></div>
   if (id === 'nav') return <div className="mini-nav"><b>Home</b><span>Explore</span><span>Saved</span></div>
   return <div className="mini-dialog"><i /><b>Ready to launch?</b><span /><span /></div>
-}
-function hexToRgb(hex: string) {
-  const clean = hex.replace('#', '')
-  const n = parseInt(clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean, 16)
-  return ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255)
 }
