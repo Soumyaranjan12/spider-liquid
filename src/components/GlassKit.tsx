@@ -2,6 +2,7 @@ import { type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, us
 import { Search, Check, CheckCircle2, Info, X, Settings, ChevronRight } from 'lucide-react'
 import AnalyticsDashboard from './AnalyticsDashboard'
 import { EditableAnalyticsTable, EditableMetricCard, EditableTrafficSources, EditableTrendChart } from './EditableAnalyticsPreviews'
+import { PrismButton, MercurySwitch, RefractiveCard, LiquidDock, FluidSegmentedControl, GlassCommandPalette, ElasticGlassSheet, LiquidToastStack } from './SignatureComponents'
 
 export function GlassButton({ children, variant = 'secondary', ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'quiet' }) {
   return <button className={`glass-button glass-button--${variant}`} {...props}>{children}</button>
@@ -48,6 +49,14 @@ export function GlassDialog({ title, description }: { title: string; description
 export function PlaygroundSample({ id, onToast }: { id: string; onToast: () => void }) {
   const [toggle, setToggle] = useState(true), [slider, setSlider] = useState(72), [segment, setSegment] = useState('Glass'), [input, setInput] = useState('SpiderPanda'), [query, setQuery] = useState('')
   switch (id) {
+    case 'prism-button': return <div className="sp-sample-center"><PrismButton onClick={onToast}>Launch sequence</PrismButton><span className="sp-interaction-hint">MOVE POINTER · PRESS TO ACTIVATE</span></div>
+    case 'mercury-switch': return <div className="sp-sample-center"><MercurySwitch defaultChecked label="Fluid motion" /><span className="sp-interaction-hint">TAP TO CHANGE THE PHYSICS</span></div>
+    case 'refractive-card': return <div className="sp-sample-center sp-refract-host"><RefractiveCard /><span className="sp-interaction-hint">MOVE POINTER ACROSS THE SURFACE</span></div>
+    case 'liquid-dock': return <div className="sp-sample-center sp-wide-sample"><LiquidDock /></div>
+    case 'fluid-segmented': return <div className="sp-sample-center sp-wide-sample"><FluidSegmentedControl /></div>
+    case 'command-palette': return <div className="sp-sample-center sp-wide-sample"><GlassCommandPalette /></div>
+    case 'elastic-sheet': return <div className="sp-sample-center sp-wide-sample"><ElasticGlassSheet /></div>
+    case 'toast-stack': return <div className="sp-sample-center sp-wide-sample"><LiquidToastStack /></div>
     case 'button': return <div className="sample-row"><GlassButton variant="primary" onClick={onToast}>Get started <ChevronRight size={16} /></GlassButton><GlassButton onClick={onToast}>Explore docs</GlassButton><GlassButton variant="quiet">Cancel</GlassButton></div>
     case 'icon-button': return <div className="sample-row"><GlassIconButton label="Settings"><Settings size={18} /></GlassIconButton><GlassIconButton label="Dismiss"><X size={18} /></GlassIconButton><GlassIconButton label="Confirm"><Check size={18} /></GlassIconButton></div>
     case 'toggle': return <div className="sample-stack"><GlassToggle checked={toggle} onChange={setToggle} label="Enable liquid effects" /><p className="sample-note">State: <b>{toggle ? 'Enabled' : 'Disabled'}</b></p></div>
