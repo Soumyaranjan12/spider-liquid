@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from 'react'
+import { useMemo, useState, type Dispatch, type SetStateAction } from 'react'
 import { Activity, ArrowDownRight, ArrowUpRight, Download, Eye, MousePointer2, RotateCcw, Settings2, Users } from 'lucide-react'
 import AnalyticsFlipCard from './AnalyticsFlipCard'
 
