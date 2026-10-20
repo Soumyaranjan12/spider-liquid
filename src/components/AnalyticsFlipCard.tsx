@@ -1,5 +1,5 @@
 import { useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Check, PencilLine } from 'lucide-react'
 
 type Props<T extends object> = {
@@ -33,6 +33,7 @@ export default function AnalyticsFlipCard<T extends object>({
     setMessage('Review your values, then confirm to update the preview.')
     setEditing(true)
   }
+
   const confirm = () => {
     setSaved(draft)
     try {
@@ -45,37 +46,24 @@ export default function AnalyticsFlipCard<T extends object>({
   }
 
   return <div className={`analytics-flip-card ${editing ? 'is-editing' : ''}`} aria-label={name}>
-    <div className="analytics-flip-inner">
-      <AnimatePresence mode="wait" initial={false}>
-        {!editing ? (
-          <motion.div
-            key="preview-face"
-            className="analytics-flip-face analytics-flip-front"
-            initial={{ rotateY: -82, opacity: 0, scale: 0.97 }}
-            animate={{ rotateY: 0, opacity: 1, scale: 1 }}
-            exit={{ rotateY: 82, opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.34, ease: [0.22, 0.61, 0.36, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <div className="afc-toolbar"><div><span>LIVE COMPONENT</span><b>{name}</b></div><button type="button" onClick={openEditor} aria-label={`Edit data for ${name}`}><PencilLine size={13}/> Edit data</button></div>
-            <div className="afc-preview-content">{renderPreview(saved)}</div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="editor-face"
-            className="analytics-flip-face analytics-flip-back"
-            initial={{ rotateY: 82, opacity: 0, scale: 0.97 }}
-            animate={{ rotateY: 0, opacity: 1, scale: 1 }}
-            exit={{ rotateY: -82, opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.34, ease: [0.22, 0.61, 0.36, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <div className="afc-editor-head"><span>COMPONENT DATA</span><h3>Edit {name}</h3><p>Adjust the demo values. Confirm to update the preview and save them in this browser.</p></div>
-            <div className="afc-editor-body">{renderEditor(draft, setDraft)}</div>
-            <div className="afc-editor-footer"><span>{message}</span><button type="button" onClick={confirm}><Check size={14}/> Confirm &amp; preview</button></div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    <motion.div
+      className="analytics-flip-inner"
+      animate={{ rotateY: editing ? 180 : 0 }}
+      transition={{ duration: 0.72, ease: [0.22, 0.68, 0, 1] }}
+    >
+      <div className="analytics-flip-face analytics-flip-front" aria-hidden={editing} inert={editing}>
+        <div className="afc-toolbar">
+          <div><span>LIVE COMPONENT</span><b>{name}</b></div>
+          <button type="button" onClick={openEditor} aria-label={`Edit data for ${name}`}><PencilLine size={13}/> Edit data</button>
+        </div>
+        <div className="afc-preview-content">{renderPreview(saved)}</div>
+      </div>
+
+      <div className="analytics-flip-face analytics-flip-back" aria-hidden={!editing} inert={!editing}>
+        <div className="afc-editor-head"><span>COMPONENT DATA</span><h3>Edit {name}</h3><p>Adjust the demo values. Confirm to update the preview and save them in this browser.</p></div>
+        <div className="afc-editor-body">{renderEditor(draft, setDraft)}</div>
+        <div className="afc-editor-footer"><span>{message}</span><button type="button" onClick={confirm}><Check size={14}/> Confirm &amp; preview</button></div>
+      </div>
+    </motion.div>
   </div>
 }
