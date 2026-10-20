@@ -124,3 +124,26 @@
 .mini-sources>i{height:5px;border-radius:99px;background:#ff535f}.mini-sources>i:nth-child(2){background:#a78bfa}.mini-sources>i:nth-child(3){background:#65d8a0}.mini-sources>i:nth-child(4){background:#79b7ff}.mini-sources>div{grid-column:span 2;display:flex;justify-content:space-between;gap:6px;font-size:7px;color:#898391}.mini-sources>div b{color:#ccc5d2;font-family:"DM Mono",monospace;font-weight:500}
 .mini-table{display:grid;gap:0;width:100%;padding:5px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.025);font-size:7px}.mini-table>div{display:flex;justify-content:space-between;gap:8px;padding:6px 3px;border-bottom:1px solid rgba(255,255,255,.06);color:#9892a0}.mini-table>div:first-child{color:#797381;font-family:"DM Mono",monospace;font-size:6px}.mini-table>div:last-child{border-bottom:0}.mini-table>div b{font-weight:500;color:#d2cbd9}
 
+
+
+/* Reliable analytics edit animation: animate the active face itself so the flip remains visible in nested preview layouts. */
+.analytics-flip-card{perspective:1400px;transform-style:preserve-3d}
+.analytics-flip-inner{display:block;position:relative;width:100%;min-width:0;transform-style:preserve-3d;will-change:height}
+.analytics-flip-face{grid-area:auto;position:relative;display:flex;flex-direction:column;width:100%;min-width:0;transform-origin:center center;backface-visibility:visible;-webkit-backface-visibility:visible;will-change:transform,opacity}
+.analytics-flip-back{transform:none}
+.afc-toolbar>button svg,.afc-editor-footer>button svg{flex:0 0 auto}
+@media(prefers-reduced-motion:reduce){.analytics-flip-card .analytics-flip-face{transition:none!important}}
+
+/* Restored Liquid Glass strength control; changes the shared glass tokens without reintroducing a blur-radius control. */
+.glass-strength-bar{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin:0 0 13px;padding:10px 12px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,calc(.012 + var(--glass-strength)*.045)),rgba(255,255,255,.012));box-shadow:inset 0 1px rgba(255,255,255,calc(.02 + var(--glass-strength)*.07));}
+.glass-strength-bar>label{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#bdb7c6;font-size:9px}
+.glass-strength-bar>label>span{display:flex;align-items:center;gap:7px;font-family:"DM Mono",monospace;font-size:7px;letter-spacing:1px;color:#b8b1c0}
+.glass-strength-bar>label>span svg{color:var(--accent)}
+.glass-strength-bar>label>b{font-family:"DM Mono",monospace;font-size:10px;color:#fff}
+.glass-strength-bar>input[type=range]{width:100%;height:4px;margin:1px 0 0;accent-color:var(--accent);cursor:pointer;appearance:auto}
+.glass-strength-bar>small{font-size:8px;color:#817b89;line-height:1.5}
+.live-stage:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:linear-gradient(132deg,rgba(255,255,255,.16),transparent 21%,transparent 66%,rgba(255,255,255,.055));opacity:calc(.08 + var(--glass-strength)*.62);mix-blend-mode:screen;transition:opacity .15s ease}
+.live-stage .stage-content{z-index:2}
+.stage-caption{z-index:3}
+.glass-card,.glass-icon-button,.field-control input,.search-control,.glass-badge,.segmented-control,.segmented-control button.active{transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,opacity .18s ease}
+
