@@ -1,6 +1,7 @@
 import { type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, useState } from 'react'
 import { Search, Check, CheckCircle2, Info, X, Settings, ChevronRight } from 'lucide-react'
 import AnalyticsDashboard from './AnalyticsDashboard'
+import { AnalyticsTable, MetricCard, TrafficSources, TrendChart } from './AnalyticsComponents'
 
 export function GlassButton({ children, variant = 'secondary', ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'quiet' }) {
   return <button className={`glass-button glass-button--${variant}`} {...props}>{children}</button>
@@ -62,6 +63,10 @@ export function PlaygroundSample({ id, onToast }: { id: string; onToast: () => v
     case 'nav': return <GlassNav items={['Home', 'Explore', 'Saved']} active={segment} onChange={setSegment} />
     case 'dialog': return <GlassDialog title="Ready to launch?" description="Your next idea deserves a beautiful surface. Continue to preview the next step." />
     case 'analytics': return <AnalyticsDashboard title="Product analytics" subtitle="A quick read on workspace activity." />
+    case 'metric-card': return <MetricCard title="Monthly revenue" value="$24,680" change="+8.4%" direction="up" />
+    case 'trend-chart': return <TrendChart title="Weekly visitors" />
+    case 'traffic-sources': return <TrafficSources />
+    case 'analytics-table': return <AnalyticsTable />
     default: return <GlassCard><p>Choose a component to explore its live preview.</p></GlassCard>
   }
 }
