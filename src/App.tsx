@@ -35,7 +35,31 @@ export default function App() {
   const [copied, setCopied] = useState('')
   const [toast, setToast] = useState(false)
   const [mobileNav, setMobileNav] = useState(false)
+  const [docsFor, setDocsFor] = useState('button')
   const current = components.find(c => c.id === selected) || components[0]
+  const docsComponent = components.find(c => c.id === docsFor) || components[0]
+  const componentReference: Record<string, { importName: string; props: string; behavior: string }> = {
+    'button': { importName: 'GlassButton', props: 'variant?: "primary" | "secondary" | "quiet"; onClick?: () => void; children: ReactNode', behavior: 'A semantic button with a translucent surface. Use variant to change emphasis; native button props such as disabled and type are supported.' },
+    'icon-button': { importName: 'GlassIconButton', props: 'label: string; children: ReactNode; native button props', behavior: 'A compact icon action. The label prop provides an accessible name for screen readers and keyboard users.' },
+    'toggle': { importName: 'GlassToggle', props: 'checked: boolean; onChange: (checked: boolean) => void; label: string', behavior: 'A controlled switch. Keep the checked state in your app and provide a clear label.' },
+    'slider': { importName: 'GlassSlider', props: 'label: string; value: number; onChange: (value: number) => void; min?: number; max?: number', behavior: 'A labeled range control. The displayed value updates as the user moves the slider.' },
+    'segmented': { importName: 'SegmentedControl', props: 'options: string[]; value: string; onChange: (value: string) => void', behavior: 'A controlled single-selection control. The selected value must match one of the provided options.' },
+    'input': { importName: 'GlassInput', props: 'label: string; native input props', behavior: 'A labeled text field that accepts standard input attributes such as value, onChange, type, and placeholder.' },
+    'search': { importName: 'GlassSearch', props: 'value: string; onChange: (value: string) => void; placeholder?: string', behavior: 'A controlled search field. Connect its value to your list-filtering logic to make search functional.' },
+    'card': { importName: 'GlassCard', props: 'children: ReactNode; className?: string', behavior: 'A presentational surface for grouping related content. Put semantic headings and content inside it.' },
+    'badge': { importName: 'GlassBadge', props: 'children: ReactNode; tone?: "neutral" | "success" | "accent"', behavior: 'A compact status indicator. Keep the text meaningful rather than relying on color alone.' },
+    'progress': { importName: 'GlassProgress', props: 'value: number; label?: string', behavior: 'Displays progress from 0 to 100. Values are clamped to that range.' },
+    'toast': { importName: 'GlassToast', props: 'title: string; description: string', behavior: 'A visual confirmation notice. Production apps should also announce important feedback through an aria-live region.' },
+    'avatar': { importName: 'GlassAvatar', props: 'initials: string; label?: string', behavior: 'A compact initials avatar with an accessible label. Replace it with an image avatar if your product supports profile photos.' },
+    'nav': { importName: 'GlassNav', props: 'items: string[]; active: string; onChange: (value: string) => void', behavior: 'A controlled navigation dock for switching between a small set of local views.' },
+    'dialog': { importName: 'GlassDialog', props: 'title: string; description: string', behavior: 'A presentational dialog preview. For a real modal, add focus trapping, Escape handling, and dialog semantics.' }
+  }
+  const reference = componentReference[docsComponent.id] || componentReference.button
+  const openComponentDocs = () => {
+    setDocsFor(selected)
+    setPage('Documentation')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   const accent = customOpen ? customAccent : palette.accent
   const filtered = useMemo(
     () => components.filter(c => (category === 'All components' || c.category === category) && (c.name + ' ' + c.description).toLowerCase().includes(search.toLowerCase())),
@@ -43,10 +67,35 @@ export default function App() {
   )
   const copy = async (text: string, label = 'Copied to clipboard') => {
     try {
-      await navigator.clipboard.writeText(text)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text)
+      } else {
+        throw new Error('Clipboard API unavailable')
+      }
       setCopied(label)
-      window.setTimeout(() => setCopied(''), 1800)
-    } catch { setCopied('Clipboard unavailable') }
+      window.setTimeout(() => setCopied(''), 2200)
+    } catch {
+      // Clipboard API can be blocked by browser permissions. Try the legacy selection fallback.
+      try {
+        const textarea = document.createElement('textarea')
+        textarea.value = text
+        textarea.setAttribute('readonly', '')
+        textarea.style.position = 'fixed'
+        textarea.style.left = '-9999px'
+        textarea.style.top = '0'
+        document.body.appendChild(textarea)
+        textarea.focus()
+        textarea.select()
+        const success = document.execCommand('copy')
+        textarea.remove()
+        if (!success) throw new Error('Copy command was rejected')
+        setCopied(label)
+        window.setTimeout(() => setCopied(''), 2200)
+      } catch {
+        setCopied('Copy failed — select the snippet and copy manually')
+        window.setTimeout(() => setCopied(''), 4500)
+      }
+    }
   }
   const showToast = () => {
     setToast(true)
@@ -79,7 +128,7 @@ export default function App() {
         <button key={name} onClick={() => { setCategory(name); setPage('Components') }}><span className={'category-dot dot-' + i} />{name}</button>
       )}</div>
       <div className="sidebar-bottom">
-        <div className="version-card"><div className="version-icon"><Zap size={15} /></div><div><b>Built for the details</b><p>Liquid Glass · v1.0</p></div><ArrowUpRight size={14} /></div>
+        <button className="version-card" onClick={() => { setDocsFor(selected); setPage('Documentation') }}><div className="version-icon"><BookOpen size={15} /></div><div><b>Component API & docs</b><p>Props, examples, accessibility</p></div><ArrowUpRight size={14} /></button>
         <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Design system</span></div><button aria-label="Settings" onClick={() => setPage('Playground')}><Settings2 size={16} /></button></div>
       </div>
     </aside>
@@ -155,13 +204,13 @@ export default function App() {
                 <div className="compact-palettes">{palettes.map(p => <button key={p.name} title={p.name} aria-label={p.name} className={palette.name === p.name && !customOpen ? 'active' : ''} style={{ background: p.accent }} onClick={() => { setPalette(p); setCustomOpen(false) }} />)}<button className="custom-color-dot" title="Custom color" onClick={() => setCustomOpen(!customOpen)}><Palette size={13} /></button></div>
                 {customOpen && <label className="inline-color">Custom accent <input type="color" value={customAccent} onChange={e => setCustomAccent(e.target.value)} /></label>}
               </div>
-              <div className="code-panel glass-panel"><div className="code-panel-head"><div><span className="mini-label">QUICK START</span><b>React + TypeScript</b></div><button className="copy-button" onClick={() => copy(current.code, 'Component code copied')}>{copied === 'Component code copied' ? <Check size={14} /> : <Copy size={14} />} {copied === 'Component code copied' ? 'Copied' : 'Copy code'}</button></div><pre><code>{current.code}</code></pre><div className="code-panel-foot"><span><span className="code-dot" /> TSX</span><button onClick={() => setPage('Documentation')}>Full docs <ArrowUpRight size={13} /></button></div></div>
+              <div className="code-panel glass-panel"><div className="code-panel-head"><div><span className="mini-label">QUICK START</span><b>React + TypeScript</b></div><button className="copy-button" onClick={() => copy(current.code, 'Component code copied')}>{copied === 'Component code copied' ? <Check size={14} /> : <Copy size={14} />} {copied === 'Component code copied' ? 'Copied' : 'Copy code'}</button></div><pre><code>{current.code}</code></pre><div className="code-panel-foot"><span><span className="code-dot" /> TSX</span><button onClick={openComponentDocs}>View API & usage <ArrowUpRight size={13} /></button></div></div>
             </div>
           </div>
         </section>}
         {page === 'Documentation' && <section className="subpage docs-page">
           <div className="subpage-heading"><div className="section-kicker">FIELD NOTES</div><h1>Designed with <span>intention.</span></h1><p>A practical guide to the Liquid Glass system — from install to the tiny details that make it feel right.</p></div>
-          <div className="docs-layout"><nav className="docs-toc glass-panel"><span className="mini-label">ON THIS PAGE</span><a href="#install">Installation</a><a href="#usage">Usage</a><a href="#tokens">Design tokens</a><a href="#principles">Material principles</a><a href="#accessibility">Accessibility</a></nav>
+          <article className="docs-article component-reference"><span className="article-number">COMPONENT REFERENCE / API</span><h2>${docsComponent.name}</h2><p>${docsComponent.description} ${reference.behavior}</p><div className="reference-meta"><span>${docsComponent.category}</span><code>${reference.importName}</code></div><h3>Props</h3><pre className="props-code"><code>${reference.props}</code></pre><h3>Example</h3><div className="code-block"><div><span>TSX SNIPPET</span><button onClick={() => copy(`import { ${reference.importName} } from './components/GlassKit'\\n\\n${docsComponent.code}`, 'Component example copied')}>{copied === 'Component example copied' ? <Check size={14} /> : <Copy size={14} />} Copy example</button></div><pre><code>{`import { ${reference.importName} } from './components/GlassKit'\\n\\n${docsComponent.code}`}</code></pre></div><GlassButton variant="quiet" onClick={() => setPage('Playground')}>Back to playground <ArrowRight size={14} /></GlassButton></article><div className="docs-layout"><nav className="docs-toc glass-panel"><span className="mini-label">ON THIS PAGE</span><a href="#install">Installation</a><a href="#usage">Usage</a><a href="#tokens">Design tokens</a><a href="#principles">Material principles</a><a href="#accessibility">Accessibility</a></nav>
             <div className="docs-content">
               <article id="install" className="docs-article"><span className="article-number">01 / GET STARTED</span><h2>Installation</h2><p>Start with a modern React app. This project uses Vite, TypeScript, Framer Motion, and Lucide icons.</p><div className="code-block"><div><span>TERMINAL</span><button onClick={() => copy('npm install\nnpm run dev', 'Install commands copied')}>{copied === 'Install commands copied' ? <Check size={14} /> : <Copy size={14} />} Copy</button></div><pre><code>{'npm install\nnpm run dev'}</code></pre></div></article>
               <article id="usage" className="docs-article"><span className="article-number">02 / COMPOSE</span><h2>Use a component</h2><p>Components are deliberately small. Compose them with your own content and keep application state in your app.</p><div className="code-block"><div><span>EXAMPLE.TSX</span><button onClick={() => copy(docsSnippet, 'Example snippet copied')}>{copied === 'Example snippet copied' ? <Check size={14} /> : <Copy size={14} />} Copy</button></div><pre><code>{docsSnippet}</code></pre></div><GlassButton variant="primary" onClick={() => setPage('Playground')}>Try it in the playground <ArrowRight size={15} /></GlassButton></article>
