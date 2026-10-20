@@ -116,3 +116,11 @@
 @media(max-width:700px){.afc-editor-face{min-height:0}.afc-source-editor{grid-template-columns:1fr}.afc-table-editor{grid-template-columns:1fr}.aw-editor-grid{grid-template-columns:1fr}.aw-full-group{grid-column:auto}.analytics-flip-face{padding:10px}}
 @media(prefers-reduced-motion:reduce){.analytics-flip-inner{transition:none!important}.afc-toolbar>button,.afc-editor-footer>button{transition:none}}
 
+
+
+/* Component library thumbnails for every analytics UI type */
+.mini-chart-title{display:block;font-family:"DM Mono",monospace;font-size:6px;letter-spacing:.6px;color:#8d8794;margin-bottom:6px}
+.mini-sources{display:grid;grid-template-columns:repeat(4,1fr);gap:3px 4px;padding:9px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.025)}
+.mini-sources>i{height:5px;border-radius:99px;background:#ff535f}.mini-sources>i:nth-child(2){background:#a78bfa}.mini-sources>i:nth-child(3){background:#65d8a0}.mini-sources>i:nth-child(4){background:#79b7ff}.mini-sources>div{grid-column:span 2;display:flex;justify-content:space-between;gap:6px;font-size:7px;color:#898391}.mini-sources>div b{color:#ccc5d2;font-family:"DM Mono",monospace;font-weight:500}
+.mini-table{display:grid;gap:0;width:100%;padding:5px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.025);font-size:7px}.mini-table>div{display:flex;justify-content:space-between;gap:8px;padding:6px 3px;border-bottom:1px solid rgba(255,255,255,.06);color:#9892a0}.mini-table>div:first-child{color:#797381;font-family:"DM Mono",monospace;font-size:6px}.mini-table>div:last-child{border-bottom:0}.mini-table>div b{font-weight:500;color:#d2cbd9}
+
