@@ -204,7 +204,7 @@ export default function App() {
         { name: 'title', type: 'string', description: 'Optional dashboard heading.' },
         { name: 'subtitle', type: 'string', description: 'Optional supporting sentence beneath the heading.' }
       ],
-      usage: 'Use as a complete analytics overview. Open Edit demo data to enter KPI values and percentage changes, change the chart series, and maintain traffic-source counts. The cards, graph and source shares update as you type; the values persist in this browser. The date range and CSV export work without a backend.',
+      usage: 'Open the live preview and click Edit data. The card flips to fields for KPI values, percentage changes, trend series and traffic-source counts; select Confirm & preview to apply and save them. The chart, KPIs and percentages then reflect your demo data. Values persist in this browser.',
       accessibility: 'Uses semantic headings, labeled controls and a chart description. Replace demo data before using it for business decisions.',
       notes: 'Composite widget example; import it from ./components/AnalyticsDashboard. Figures are illustrative, not a real analytics feed. Demo values are saved to localStorage under spiderpanda.analytics-dashboard.v1 and can be restored with Reset demo.'
     },
@@ -218,7 +218,7 @@ export default function App() {
         { name: 'direction', type: '"up" | "down"', description: 'Selects positive or negative trend styling.' },
         { name: 'caption', type: 'string', description: 'Small context line; defaults to vs previous period.' }
       ],
-      usage: 'Use for the most important one-number summaries at the top of a dashboard. Keep the metric unit and comparison period explicit.',
+      usage: 'Use for the most important one-number summaries at the top of a dashboard. Keep the metric unit and comparison period explicit. In the playground, click Edit data to flip the card, change its title, value and trend, then select Confirm & preview to save the updated visualization.',
       accessibility: 'The title and value are text, so the meaning does not depend on the sparkline or color. Ensure a down direction is not automatically described as bad unless the metric requires it.',
       notes: 'The sparkline is decorative sample artwork; pass real values into the metric props and replace sparkline data if you need a true historical mini-chart.'
     },
@@ -230,7 +230,7 @@ export default function App() {
         { name: 'data', type: 'Array<{ label: string; value: number }>', description: 'Ordered points to display; each point needs a label and numeric value.' },
         { name: 'valueSuffix', type: 'string', description: 'Optional suffix such as % or k, used in the selected point summary.' }
       ],
-      usage: 'Pass points in chronological order. For more complex date ranges, format the labels in your application before passing data.',
+      usage: 'Pass points in chronological order. In the playground, click Edit data to flip the card, edit point labels and comma-separated values, then select Confirm & preview; the chart uses the saved series. For more complex date ranges, format labels in your application before passing data.',
       accessibility: 'Data bars are keyboard-focusable buttons with a label for each point; visible text reports the selected value.',
       notes: 'The included example data is for preview. The component calculates bar heights from the largest value in the provided series.'
     },
@@ -241,7 +241,7 @@ export default function App() {
         { name: 'title', type: 'string', description: 'Section heading.' },
         { name: 'data', type: 'Array<{ name: string; value: number; color?: string }>', description: 'Source names and numeric values; color is optional.' }
       ],
-      usage: 'Use when comparing a small collection of acquisition or category sources. Values should use the same unit and time period.',
+      usage: 'Use when comparing a small collection of acquisition or category sources. Values should use the same unit and time period. Click Edit data in the playground to change each source label and count, then select Confirm & preview to save and recalculate the stacked bar and percentages.',
       accessibility: 'Source names, values, and calculated percentages are written out below the stacked visual instead of relying on color alone.',
       notes: 'Negative values are excluded from the visual total. If no color is provided, the component uses the SpiderPanda accent.'
     },
@@ -253,7 +253,7 @@ export default function App() {
         { name: 'columns', type: 'Array<{ key: string; label: string }>', description: 'Column keys and human-readable labels.' },
         { name: 'rows', type: 'Array<Record<string, string | number>>', description: 'Rows whose keys match the configured columns.' }
       ],
-      usage: 'Keep columns focused on the decision users need to make. Use numbers for metric columns so sorting is numeric rather than alphabetical.',
+      usage: 'Keep columns focused on the decision users need to make. Use numbers for metric columns so sorting is numeric rather than alphabetical. Click Edit data to flip to fields for page paths, visitor values and change labels. Confirm & preview applies the new rows to the table.',
       accessibility: 'Uses a semantic HTML table and buttons inside headings to toggle sort direction.',
       notes: 'This component handles client-side sorting only. Fetch, filter, paginate, and validate records in the parent application when needed.'
     }
@@ -451,5 +451,9 @@ function MiniPreview({ id }: { id: string }) {
   if (id === 'avatar') return <div className="mini-avatars"><i>SP</i><i>AL</i><i>MK</i></div>
   if (id === 'nav') return <div className="mini-nav"><b>Home</b><span>Explore</span><span>Saved</span></div>
   if (id === 'analytics') return <div className="mini-analytics"><div className="mini-analytics-metrics"><b>8.2k<small>Visitors</small></b><b>68%<small>Engagement</small></b></div><div className="mini-analytics-bars">{[38,60,45,75,58,91,72].map((height,i)=><i key={i} style={{height:`${height}%`}}/>)}</div></div>
+  if (id === 'metric-card') return <div className="mini-metric"><small>MONTHLY REVENUE</small><b>$24,680</b><i /></div>
+  if (id === 'trend-chart') return <div className="mini-analytics"><small className="mini-chart-title">WEEKLY VISITORS</small><div className="mini-analytics-bars">{[28,44,36,67,52,86,70].map((height,i)=><i key={i} style={{height:`${height}%`}}/>)}</div></div>
+  if (id === 'traffic-sources') return <div className="mini-sources"><i/><i/><i/><i/><div><span>Direct</span><b>38%</b></div><div><span>Search</span><b>29%</b></div><div><span>Social</span><b>21%</b></div></div>
+  if (id === 'analytics-table') return <div className="mini-table"><div><b>PAGE</b><b>VISITORS</b></div><div><span>/dashboard</span><b>4,280</b></div><div><span>/pricing</span><b>2,310</b></div><div><span>/docs</span><b>1,940</b></div></div>
   return <div className="mini-dialog"><i /><b>Ready to launch?</b><span /><span /></div>
 }
