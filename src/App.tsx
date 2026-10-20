@@ -5,7 +5,6 @@ import {
   ChevronRight, Github, Layers3, Menu, Search, Settings2, Sparkles, X
 } from 'lucide-react'
 import { components } from './data/components'
-import AnalyticsDashboard from './components/AnalyticsDashboard'
 import { GlassBadge, GlassButton, GlassCard, GlassSearch, PlaygroundSample } from './components/GlassKit'
 
 type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation'
@@ -205,9 +204,9 @@ export default function App() {
         { name: 'title', type: 'string', description: 'Optional dashboard heading.' },
         { name: 'subtitle', type: 'string', description: 'Optional supporting sentence beneath the heading.' }
       ],
-      usage: 'Use as a complete analytics overview. It uses illustrative data, and its date range, metric selector and CSV export work without a backend.',
+      usage: 'Use as a complete analytics overview. Open Edit demo data to enter KPI values and percentage changes, change the chart series, and maintain traffic-source counts. The cards, graph and source shares update as you type; the values persist in this browser. The date range and CSV export work without a backend.',
       accessibility: 'Uses semantic headings, labeled controls and a chart description. Replace demo data before using it for business decisions.',
-      notes: 'Composite widget example; import it from ./components/AnalyticsDashboard. Figures are illustrative, not a real analytics feed.'
+      notes: 'Composite widget example; import it from ./components/AnalyticsDashboard. Figures are illustrative, not a real analytics feed. Demo values are saved to localStorage under spiderpanda.analytics-dashboard.v1 and can be restored with Reset demo.'
     },
     'metric-card': {
       importName: 'MetricCard',
@@ -360,7 +359,17 @@ export default function App() {
               <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setSelected('analytics'); setPage('Playground') }}>Try analytics component <BarChart3 size={16} /></GlassButton><button className="text-button" onClick={() => { setCategory('Analytics'); setPage('Components') }}>Browse analytics components <ArrowUpRight size={15} /></button></div>
               <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>19 reusable components</b><br />Interactive previews · API docs · exportable analytics</span></div>
             </div>
-            <div className="home-launch-panel glass-panel overview-analytics"><AnalyticsDashboard title="Product analytics" subtitle="Interactive sample dashboard · switch ranges and export CSV." /></div>
+            <div className="home-launch-panel glass-panel overview-toolkit">
+              <div className="home-panel-top"><div><span className="mini-label">ANALYTICS COMPONENTS</span><h2>Build your own dashboard</h2></div><span className="home-panel-live"><i/> Ready to edit</span></div>
+              <p className="overview-toolkit-copy">Pick a building block to preview it. The dashboard has an editable demo-data panel that updates its graph as you change values.</p>
+              <div className="quick-game-grid">
+                <button onClick={() => { setSelected('analytics'); setPage('Playground') }}><span className="quick-game-icon metric-icon">↗</span><span><b>Analytics Dashboard</b><small>Edit KPI values, trends and sources</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('metric-card'); setPage('Playground') }}><span className="quick-game-icon metric-icon">#</span><span><b>Metric cards</b><small>Numbers, change and sparkline</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('trend-chart'); setPage('Playground') }}><span className="quick-game-icon metric-icon">⌁</span><span><b>Trend charts</b><small>Editable series and data points</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('traffic-sources'); setPage('Playground') }}><span className="quick-game-icon metric-icon">◔</span><span><b>Sources & data tables</b><small>Proportions, percentages and sorting</small></span><ChevronRight size={15}/></button>
+              </div>
+              <div className="home-panel-foot"><div><BarChart3 size={15}/><span><b>Demo data settings</b><small>Saved locally in this browser</small></span></div><button onClick={() => { setCategory('Analytics'); setPage('Components') }}>All analytics UI <ArrowUpRight size={13}/></button></div>
+            </div>
           </section>
           <section className="stats-row studio-stats">
             <div><span className="stat-label">COMPONENTS</span><b>19</b><small>Controls, surfaces, feedback and analytics</small></div>
