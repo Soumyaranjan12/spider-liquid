@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, Code2, Copy,
@@ -19,6 +19,20 @@ export default function App() {
   const [copied, setCopied] = useState('')
   const [toast, setToast] = useState(false)
   const [mobileNav, setMobileNav] = useState(false)
+  const [glassStrength, setGlassStrength] = useState(() => {
+    try {
+      const stored = localStorage.getItem('spiderpanda.glass-strength')
+      const parsed = stored === null ? 58 : Number(stored)
+      return Number.isFinite(parsed) ? Math.min(100, Math.max(0, parsed)) : 58
+    } catch {
+      return 58
+    }
+  })
+  const updateGlassStrength = (value: number) => {
+    const next = Math.min(100, Math.max(0, value))
+    setGlassStrength(next)
+    try { localStorage.setItem('spiderpanda.glass-strength', String(next)) } catch { /* Storage is optional. */ }
+  }
   const current = components.find(c => c.id === selected) || components[0]
   const componentReference: Record<string, {
     importName: string
@@ -318,7 +332,14 @@ export default function App() {
     { label: 'Documentation' as Page, icon: BookOpen }
   ]
 
-  return <div className="app-shell">
+  return <div className="app-shell" style={{
+    '--glass-strength': String(glassStrength / 100),
+    '--glass-opacity': 0.28 + (glassStrength / 100) * 0.65,
+    '--glass-fill': 0.025 + (glassStrength / 100) * 0.2,
+    '--glass-fill-soft': 0.012 + (glassStrength / 100) * 0.095,
+    '--glass-fill-strong': 0.035 + (glassStrength / 100) * 0.25,
+    '--glass-fill-dark': 0.025 + (glassStrength / 100) * 0.18,
+  } as CSSProperties}>
     <div className="ambient ambient-one" /><div className="ambient ambient-two" /><div className="ambient ambient-three" />
     <aside className={'sidebar ' + (mobileNav ? 'sidebar-open' : '')}>
       <button className="brand" onClick={() => setPage('Overview')} aria-label="SpiderPanda home">
@@ -400,6 +421,11 @@ export default function App() {
             <aside className="playground-list glass-panel"><div className="panel-heading"><div><b>Components</b><p>Choose a preview</p></div><span className="list-count">{components.length}</span></div><GlassSearch placeholder="Filter components…" value={search} onChange={setSearch} /><div className="playground-items">{components.filter(c => (c.name + c.category).toLowerCase().includes(search.toLowerCase())).map(c => <button key={c.id} className={selected === c.id ? 'active' : ''} onClick={() => setSelected(c.id)}><span className="item-icon"><Code2 size={15} /></span><span>{c.name}<small>{c.category}</small></span>{selected === c.id && <span className="item-active-dot" />}</button>)}</div></aside>
             <div className="playground-main">
               <div className="preview-panel glass-panel"><div className="preview-panel-head"><div><span className="mini-label">LIVE PREVIEW</span><h3>{current.name}</h3></div><div className="preview-head-actions"><GlassBadge tone="success">Interactive</GlassBadge><button type="button" className="top-icon copy-preview-button" aria-label={copied === 'Component code copied' ? 'Component code copied' : 'Copy component code'} title={copied === 'Component code copied' ? 'Copied to clipboard' : 'Copy component code'} onClick={() => copy(componentSnippet, 'Component code copied')}>{copied === 'Component code copied' ? <Check size={15} /> : <Copy size={15} />}</button></div></div>
+                <div className="glass-strength-bar">
+                  <label htmlFor="glass-strength-range"><span><Settings2 size={13}/> LIQUID GLASS STRENGTH</span><b>{glassStrength}%</b></label>
+                  <input id="glass-strength-range" type="range" min={0} max={100} step={1} value={glassStrength} onChange={event => updateGlassStrength(Number(event.target.value))} aria-label="Liquid Glass strength"/>
+                  <small>Adjust surface fill, reflections, and contrast across the component previews.</small>
+                </div>
                 <div className="live-stage stage-aurora"><div className="stage-glow" /><div className="stage-content"><PlaygroundSample key={selected} id={selected} onToast={showToast} /></div><span className="stage-caption"><span /> POINTER-READY SURFACE</span></div>
                 <div className="preview-panel-foot"><span><i /> Live component</span><span>Preview is illustrative</span></div>
               </div>
