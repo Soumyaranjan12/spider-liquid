@@ -32,7 +32,9 @@ https://soumyaranjan12.github.io/spider-liquid/
 
 ## Features
 
-- **19 reusable components** across controls, forms, surfaces, feedback, navigation, overlays, and analytics.
+- **27 reusable components** across signature interactions, controls, forms, surfaces, feedback, navigation, overlays, and analytics.
+- **Eight signature glass components:** Prism Button, Mercury Switch, Refractive Card, Liquid Dock, Fluid Segmented Control, Glass Command Palette, Elastic Glass Sheet, and Liquid Toast Stack.
+- **Pointer-aware details and spring animations:** specular cursor light, perspective tilt, shared-layout pill transitions, keyboard-opened command palette, draggable sheet, and animated toast stacking.
 - **Overview focused on the component library:** no dashboard preview. It highlights useful components across categories and links to the complete collection.
 - **Five editable analytics UI components:** complete Analytics Dashboard, metric card, trend chart, traffic-source breakdown, and analytics data table.
 - **Animated flip-to-edit UI:** click **Edit data** on any analytics component to flip it to its own editor; **Confirm & preview** saves your values and flips back to the updated component.
@@ -51,6 +53,7 @@ The analytics widgets use illustrative demo data so they can be explored without
 - `src/components/EditableAnalyticsPreviews.tsx`: editable metric card, trend chart, source breakdown, and data table previews
 - `src/components/AnalyticsComponents.tsx`: analytics UI building blocks
 - `src/components/GlassKit.tsx`: reusable UI primitives and live preview renderer
+- `src/components/SignatureComponents.tsx`: eight interactive signature components built with Framer Motion
 - `src/data/components.ts`: component catalogue and examples
 - `src/styles.css`: theme, component visuals, flip animation, and responsive layout
 - `.github/workflows/pages.yml`: automated GitHub Pages deployment
