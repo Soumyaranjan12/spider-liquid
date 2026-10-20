@@ -1,16 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, Code2, Copy,
   ChevronRight, Github, Layers3, Menu, Search, Settings2, Sparkles, X
 } from 'lucide-react'
 import { components } from './data/components'
-import AnalyticsPanel from './components/AnalyticsPanel'
 import AnalyticsDashboard from './components/AnalyticsDashboard'
-import { trackEvent } from './utils/analytics'
 import { GlassBadge, GlassButton, GlassCard, GlassSearch, PlaygroundSample } from './components/GlassKit'
 
-type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation' | 'Analytics'
+type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation'
 const categories = ['All components', 'Controls', 'Forms', 'Surfaces', 'Feedback', 'Navigation', 'Overlays', 'Analytics']
 const docsSnippet = "import { GlassButton, GlassCard, GlassToggle } from './components/GlassKit'\n\nexport function Example() {\n  return (\n    <GlassCard>\n      <h2>Welcome back</h2>\n      <p>Beautiful interfaces, with a little depth.</p>\n      <GlassButton variant=\"primary\">Continue</GlassButton>\n    </GlassCard>\n  )\n}"
 
@@ -202,20 +200,74 @@ export default function App() {
     },
     'analytics': {
       importName: 'AnalyticsDashboard',
-      summary: 'An interactive analytics dashboard with KPI cards, a trend chart, traffic-source breakdown and CSV export.',
+      summary: 'A composed analytics dashboard with KPI cards, trend chart, traffic-source breakdown and CSV export.',
       props: [
-        { name: 'title', type: 'string', description: 'Optional heading above the dashboard; defaults to "Product analytics".' },
+        { name: 'title', type: 'string', description: 'Optional dashboard heading.' },
         { name: 'subtitle', type: 'string', description: 'Optional supporting sentence beneath the heading.' }
       ],
-      usage: 'Use when users need a fast read of product or workspace metrics. Replace the illustrative series with your own API data before using it for business decisions. The time range, metric selector and CSV export work without a backend.',
-      accessibility: 'Selectors and export actions are native buttons. The chart has a descriptive accessible label; values are represented in text and source rows, not color alone.',
-      notes: 'Included values are sample data. They are not connected to the local activity analytics page or an external service. CSV exports the currently selected series.'
+      usage: 'Use as a complete analytics overview. It uses illustrative data, and its date range, metric selector and CSV export work without a backend.',
+      accessibility: 'Uses semantic headings, labeled controls and a chart description. Replace demo data before using it for business decisions.',
+      notes: 'Composite widget example; import it from ./components/AnalyticsDashboard. Figures are illustrative, not a real analytics feed.'
+    },
+    'metric-card': {
+      importName: 'MetricCard',
+      summary: 'A compact KPI card showing a metric, direction of change, period caption, and sparkline.',
+      props: [
+        { name: 'title', type: 'string', description: 'Metric label, such as Monthly revenue or Active users.' },
+        { name: 'value', type: 'string | number', description: 'Primary metric value. Numbers are formatted with locale separators.' },
+        { name: 'change', type: 'string', description: 'Change to display, e.g. +8.4% or −2.1%.' },
+        { name: 'direction', type: '"up" | "down"', description: 'Selects positive or negative trend styling.' },
+        { name: 'caption', type: 'string', description: 'Small context line; defaults to vs previous period.' }
+      ],
+      usage: 'Use for the most important one-number summaries at the top of a dashboard. Keep the metric unit and comparison period explicit.',
+      accessibility: 'The title and value are text, so the meaning does not depend on the sparkline or color. Ensure a down direction is not automatically described as bad unless the metric requires it.',
+      notes: 'The sparkline is decorative sample artwork; pass real values into the metric props and replace sparkline data if you need a true historical mini-chart.'
+    },
+    'trend-chart': {
+      importName: 'TrendChart',
+      summary: 'A small time-series bar chart with hover, focus, and click selection for individual points.',
+      props: [
+        { name: 'title', type: 'string', description: 'Chart heading.' },
+        { name: 'data', type: 'Array<{ label: string; value: number }>', description: 'Ordered points to display; each point needs a label and numeric value.' },
+        { name: 'valueSuffix', type: 'string', description: 'Optional suffix such as % or k, used in the selected point summary.' }
+      ],
+      usage: 'Pass points in chronological order. For more complex date ranges, format the labels in your application before passing data.',
+      accessibility: 'Data bars are keyboard-focusable buttons with a label for each point; visible text reports the selected value.',
+      notes: 'The included example data is for preview. The component calculates bar heights from the largest value in the provided series.'
+    },
+    'traffic-sources': {
+      importName: 'TrafficSources',
+      summary: 'A proportional stacked bar and source list that calculates totals and percentage share.',
+      props: [
+        { name: 'title', type: 'string', description: 'Section heading.' },
+        { name: 'data', type: 'Array<{ name: string; value: number; color?: string }>', description: 'Source names and numeric values; color is optional.' }
+      ],
+      usage: 'Use when comparing a small collection of acquisition or category sources. Values should use the same unit and time period.',
+      accessibility: 'Source names, values, and calculated percentages are written out below the stacked visual instead of relying on color alone.',
+      notes: 'Negative values are excluded from the visual total. If no color is provided, the component uses the SpiderPanda accent.'
+    },
+    'analytics-table': {
+      importName: 'AnalyticsTable',
+      summary: 'A compact data table with sortable column headings for analytics reports.',
+      props: [
+        { name: 'title', type: 'string', description: 'Table heading.' },
+        { name: 'columns', type: 'Array<{ key: string; label: string }>', description: 'Column keys and human-readable labels.' },
+        { name: 'rows', type: 'Array<Record<string, string | number>>', description: 'Rows whose keys match the configured columns.' }
+      ],
+      usage: 'Keep columns focused on the decision users need to make. Use numbers for metric columns so sorting is numeric rather than alphabetical.',
+      accessibility: 'Uses a semantic HTML table and buttons inside headings to toggle sort direction.',
+      notes: 'This component handles client-side sorting only. Fetch, filter, paginate, and validate records in the parent application when needed.'
     }
-  }
   const reference = componentReference[current.id] || componentReference.button
-  const componentSnippet = `${current.id === 'analytics' ? "import AnalyticsDashboard from './components/AnalyticsDashboard'" : `import { ${reference.importName} } from './components/GlassKit'`}\n\n${current.code}`
+  const analyticsImports: Record<string, string> = {
+    analytics: "import AnalyticsDashboard from './components/AnalyticsDashboard'",
+    'metric-card': "import { MetricCard } from './components/AnalyticsComponents'",
+    'trend-chart': "import { TrendChart } from './components/AnalyticsComponents'",
+    'traffic-sources': "import { TrafficSources } from './components/AnalyticsComponents'",
+    'analytics-table': "import { AnalyticsTable } from './components/AnalyticsComponents'"
+  }
+  const componentSnippet = `${analyticsImports[current.id] || `import { ${reference.importName} } from './components/GlassKit'`}\n\n${current.code}`
   const openComponentDocs = () => {
-    trackEvent('docs_open', current.name)
     setPage('Documentation')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -231,7 +283,6 @@ export default function App() {
         throw new Error('Clipboard API unavailable')
       }
       setCopied(label)
-      trackEvent('copy_code', label)
       window.setTimeout(() => setCopied(''), 2200)
     } catch {
       // Clipboard API can be blocked by browser permissions. Try the legacy selection fallback.
@@ -249,7 +300,6 @@ export default function App() {
         textarea.remove()
         if (!success) throw new Error('Copy command was rejected')
         setCopied(label)
-        trackEvent('copy_code', label)
         window.setTimeout(() => setCopied(''), 2200)
       } catch {
         setCopied('Copy failed — select the snippet and copy manually')
@@ -261,11 +311,8 @@ export default function App() {
     setToast(true)
     window.setTimeout(() => setToast(false), 2600)
   }
-  useEffect(() => { trackEvent('page_view', page) }, [page])
-  useEffect(() => { if (page === 'Playground') trackEvent('component_preview', selected) }, [page, selected])
   const navItems = [
     { label: 'Overview' as Page, icon: Layers3 },
-    { label: 'Analytics' as Page, icon: BarChart3 },
     { label: 'Components' as Page, icon: Sparkles },
     { label: 'Playground' as Page, icon: Code2 },
     { label: 'Documentation' as Page, icon: BookOpen }
@@ -299,7 +346,7 @@ export default function App() {
         <div className="breadcrumbs"><span>SpiderPanda</span><span className="crumb-slash">/</span><b>{page}</b></div>
         <div className="top-actions">
           <a className="top-icon" href="https://github.com/Soumyaranjan12/spider-liquid" target="_blank" rel="noreferrer" aria-label="GitHub repository"><Github size={17} /></a>
-          <button className="top-code" onClick={() => setPage('Analytics')}><BarChart3 size={15} /> Your activity <ArrowUpRight size={14} /></button>
+          <button className="top-code" onClick={() => { setCategory('Analytics'); setPage('Components') }}><BarChart3 size={15} /> Analytics UI <ArrowUpRight size={14} /></button>
         </div>
       </header>
       <div className="page-content">
@@ -309,20 +356,20 @@ export default function App() {
               <div className="eyebrow-line"><span className="eyebrow-icon"><Activity size={13} /></span> BUILD · MEASURE · IMPROVE <span className="eyebrow-rule" /></div>
               <h1>Your next idea<br />starts <span className="gradient-word">here.</span></h1>
               <p className="hero-subtitle">A practical component studio with interactive previews, a working analytics dashboard, and local workspace insights.</p>
-              <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setSelected('analytics'); setPage('Playground') }}>Try analytics component <BarChart3 size={16} /></GlassButton><button className="text-button" onClick={() => setPage('Analytics')}>View local activity <ArrowUpRight size={15} /></button></div>
-              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>15 reusable components</b><br />Interactive previews · API docs · exportable analytics</span></div>
+              <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setSelected('analytics'); setPage('Playground') }}>Try analytics component <BarChart3 size={16} /></GlassButton><button className="text-button" onClick={() => { setCategory('Analytics'); setPage('Components') }}>Browse analytics components <ArrowUpRight size={15} /></button></div>
+              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>19 reusable components</b><br />Interactive previews · API docs · exportable analytics</span></div>
             </div>
             <div className="home-launch-panel glass-panel overview-analytics"><AnalyticsDashboard title="Product analytics" subtitle="Interactive sample dashboard · switch ranges and export CSV." /></div>
           </section>
           <section className="stats-row studio-stats">
-            <div><span className="stat-label">COMPONENTS</span><b>15<span>+</span></b><small>Controls, surfaces, feedback and analytics</small></div>
+            <div><span className="stat-label">COMPONENTS</span><b>19</b><small>Controls, surfaces, feedback and analytics</small></div>
             <div><span className="stat-label">ANALYTICS UI</span><b className="stat-word">Interactive</b><small>Range selector, metrics, CSV export</small></div>
             <div><span className="stat-label">DOCUMENTATION</span><b className="stat-word">API</b><small>Props, examples, implementation notes</small></div>
-            <div><span className="stat-label">LOCAL INSIGHTS</span><b className="stat-word">Private</b><small>Workspace activity stays in this browser</small></div>
+            <div><span className="stat-label">ANALYTICS BLOCKS</span><b>05</b><small>Dashboard, KPIs, trends, sources, table</small></div>
           </section>
           <section className="section-block">
             <div className="section-heading"><div><div className="section-kicker">COMPONENT STUDIO</div><h2>Useful pieces. <span>Ready to test.</span></h2><p className="section-description">Open a component to explore the live preview, API reference and copy-ready snippet.</p></div><button className="view-all" onClick={() => setPage('Components')}>Browse components <ArrowRight size={15} /></button></div>
-            <div className="featured-grid">{components.filter(c => ['analytics', 'button', 'card', 'progress'].includes(c.id)).map((c, i) =>
+            <div className="featured-grid">{components.filter(c => ['metric-card', 'trend-chart', 'traffic-sources', 'analytics-table'].includes(c.id)).map((c, i) =>
               <motion.button whileHover={{ y: -4 }} key={c.id} className={'featured-card feature-' + i} onClick={() => { setSelected(c.id); setPage('Playground') }}>
                 <div className="featured-card-top"><span className="component-index">0{i + 1}</span><span className="card-arrow"><ArrowUpRight size={15} /></span></div>
                 <div className="featured-preview"><MiniPreview id={c.id} /></div>
@@ -331,7 +378,6 @@ export default function App() {
             )}</div>
           </section>
         </>}
-        {page === 'Analytics' && <AnalyticsPanel onNavigate={destination => setPage(destination)} />}
         {page === 'Components' && <section className="subpage">
           <div className="subpage-heading"><div className="section-kicker">THE LIBRARY</div><h1>Made to <span>compose.</span></h1><p>Explore the full collection of interactive liquid-glass building blocks.</p></div>
           <div className="library-toolbar"><GlassSearch placeholder="Search components…" value={search} onChange={setSearch} /><div className="category-pills">{categories.map(c => <button key={c} className={category === c ? 'active' : ''} onClick={() => setCategory(c)}>{c}</button>)}</div></div>
