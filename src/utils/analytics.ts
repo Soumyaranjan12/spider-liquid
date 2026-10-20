@@ -61,12 +61,12 @@ export function summarizeAnalytics(events = readAnalytics()) {
     levelsCleared: count('pen_level_complete'),
     daily: Array.from({ length: 7 }, (_, i) => {
       const date = new Date()
-      date.setHours(0, 0, 0, 0)
-      date.setDate(date.getDate() - (6 - i))
+      date.setUTCHours(0, 0, 0, 0)
+      date.setUTCDate(date.getUTCDate() - (6 - i))
       const key = date.toISOString().slice(0, 10)
       return {
         date: key,
-        label: date.toLocaleDateString(undefined, { weekday: 'short' }),
+        label: date.toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' }),
         count: recent.filter(event => event.at.slice(0, 10) === key).length
       }
     }),
