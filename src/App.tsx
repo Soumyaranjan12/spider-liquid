@@ -2,26 +2,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, Code2, Copy,
-  ChevronRight, Gamepad2, Github, Layers3, Menu, Search, Settings2, Sparkles, X
+  ChevronRight, Github, Layers3, Menu, Search, Settings2, Sparkles, X
 } from 'lucide-react'
 import { components } from './data/components'
 import AnalyticsPanel from './components/AnalyticsPanel'
-import GamesHub, { type MiniGameId } from './components/GamesHub'
+import AnalyticsDashboard from './components/AnalyticsDashboard'
 import { trackEvent } from './utils/analytics'
 import { GlassBadge, GlassButton, GlassCard, GlassSearch, PlaygroundSample } from './components/GlassKit'
 
-type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation' | 'Analytics' | 'Games'
-const categories = ['All components', 'Controls', 'Forms', 'Surfaces', 'Feedback', 'Navigation', 'Overlays']
+type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation' | 'Analytics'
+const categories = ['All components', 'Controls', 'Forms', 'Surfaces', 'Feedback', 'Navigation', 'Overlays', 'Analytics']
 const docsSnippet = "import { GlassButton, GlassCard, GlassToggle } from './components/GlassKit'\n\nexport function Example() {\n  return (\n    <GlassCard>\n      <h2>Welcome back</h2>\n      <p>Beautiful interfaces, with a little depth.</p>\n      <GlassButton variant=\"primary\">Continue</GlassButton>\n    </GlassCard>\n  )\n}"
 
 export default function App() {
-  const initialParams = new URLSearchParams(window.location.search)
-  const [page, setPage] = useState<Page>(() => initialParams.get('game') === 'games' ? 'Games' : 'Overview')
-  const [requestedGame, setRequestedGame] = useState<MiniGameId>(() => {
-    const query = initialParams.get('mini')
-    return query === 'chess' || query === 'pen' ? query : 'snake'
-  })
-  const initialRoom = initialParams.get('room') || ''
+  const [page, setPage] = useState<Page>('Overview')
   const [selected, setSelected] = useState('button')
   const [category, setCategory] = useState('All components')
   const [search, setSearch] = useState('')
@@ -205,6 +199,17 @@ export default function App() {
       usage: 'Use as a visual starting point for confirmation and focused tasks. Connect actions to meaningful decisions before using it as a real modal.',
       accessibility: 'This component is only a visual preview, not a production modal. Add role="dialog", aria-modal, focus trapping, Escape handling, and focus restoration when implementing the full behavior.',
       notes: 'The preview buttons are illustrative. Add an overlay and manage open/close state in the parent application.'
+    },
+    'analytics': {
+      importName: 'AnalyticsDashboard',
+      summary: 'An interactive analytics dashboard with KPI cards, a trend chart, traffic-source breakdown and CSV export.',
+      props: [
+        { name: 'title', type: 'string', description: 'Optional heading above the dashboard; defaults to "Product analytics".' },
+        { name: 'subtitle', type: 'string', description: 'Optional supporting sentence beneath the heading.' }
+      ],
+      usage: 'Use when users need a fast read of product or workspace metrics. Replace the illustrative series with your own API data before using it for business decisions. The time range, metric selector and CSV export work without a backend.',
+      accessibility: 'Selectors and export actions are native buttons. The chart has a descriptive accessible label; values are represented in text and source rows, not color alone.',
+      notes: 'Included values are sample data. They are not connected to the local activity analytics page or an external service. CSV exports the currently selected series.'
     }
   }
   const reference = componentReference[current.id] || componentReference.button
@@ -258,7 +263,6 @@ export default function App() {
   const navItems = [
     { label: 'Overview' as Page, icon: Layers3 },
     { label: 'Analytics' as Page, icon: BarChart3 },
-    { label: 'Games' as Page, icon: Gamepad2 },
     { label: 'Components' as Page, icon: Sparkles },
     { label: 'Playground' as Page, icon: Code2 },
     { label: 'Documentation' as Page, icon: BookOpen }
@@ -276,7 +280,7 @@ export default function App() {
           <Icon size={17} strokeWidth={1.8} /><span>{label}</span>{label === 'Components' && <small>14</small>}
         </button>
       )}</nav>
-      <div className="side-caption side-caption-spaced">COMPONENTS</div>
+      <div className="side-caption side-caption-spaced">LIBRARY</div>
       <div className="side-nav compact">{categories.slice(1).map((name, i) =>
         <button key={name} onClick={() => { setCategory(name); setPage('Components') }}><span className={'category-dot dot-' + i} />{name}</button>
       )}</div>
