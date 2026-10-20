@@ -105,7 +105,7 @@ export function AnalyticsTable({
   const sort=(key:string)=>{if(sortBy===key)setDescending(value=>!value);else{setSortBy(key);setDescending(true)}}
   return <article className="analytics-table-component">
     <div className="atc-head"><div><span>CONTENT PERFORMANCE</span><h4>{title}</h4></div><span>{rows.length} rows</span></div>
-    <div className="atc-scroll"><table><thead><tr>{columns.map(column=><th key={column.key}><button onClick={()=>sort(column.key)}>{column.label}{sortBy===column.key?(descending?<ChevronDown size={12}/>:<ChevronUp size={12}/>):null}</button></th>)}</tr></thead><tbody>{sorted.map((row,index)=><tr key={String(row[columns[0]?.key]??index)}>{columns.map(column=><td key={column.key}>{column.key==='change'?<span className={String(row[column.key]).startsWith('+')?'atc-positive':'atc-neutral'}>{row[column.key]}</span>:row[column.key]}</td>)}</tr>)}</tbody></table></div>
+    <div className="atc-scroll"><table><thead><tr>{columns.map(column=><th key={column.key}><button onClick={()=>sort(column.key)}>{column.label}{sortBy===column.key?(descending?<ChevronDown size={12}/>:<ChevronUp size={12}/>):null}</button></th>)}</tr></thead><tbody>{sorted.map((row,index)=><tr key={String(columns[0] ? row[columns[0].key] : index)}>{columns.map(column=><td key={column.key}>{column.key==='change'?<span className={String(row[column.key]).startsWith('+')?'atc-positive':'atc-neutral'}>{row[column.key]}</span>:row[column.key]}</td>)}</tr>)}</tbody></table></div>
     <div className="atc-foot">Select a column heading to sort the rows.</div>
   </article>
 }
