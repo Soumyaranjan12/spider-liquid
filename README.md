@@ -1,6 +1,6 @@
 # SpiderPanda Creative Lab
 
-A React and TypeScript component library for refined glass UI, practical controls, live previews, and copy-ready examples.
+A React and TypeScript library for signature liquid-glass interactions and highly animated, interactive analytics dashboards.
 
 ## Run locally
 
@@ -32,11 +32,12 @@ https://soumyaranjan12.github.io/spider-liquid/
 
 ## Features
 
-- **27 reusable components** across signature interactions, controls, forms, surfaces, feedback, navigation, overlays, and analytics.
+- **15 current components only:** eight signature glass interactions and seven analytics experiences. Legacy catalogue entries and their old playground previews have been removed.
 - **Eight signature glass components:** Prism Button, Mercury Switch, Refractive Card, Liquid Dock, Fluid Segmented Control, Glass Command Palette, Elastic Glass Sheet, and Liquid Toast Stack.
 - **Pointer-aware details and spring animations:** specular cursor light, perspective tilt, shared-layout pill transitions, keyboard-opened command palette, draggable sheet, and animated toast stacking.
 - **Overview focused on the component library:** no dashboard preview. It highlights useful components across categories and links to the complete collection.
-- **Five editable analytics UI components:** complete Analytics Dashboard, metric card, trend chart, traffic-source breakdown, and analytics data table.
+- **Three analytics dashboard experiences:** editable Product Analytics, Realtime Pulse with an animated signal and rolling event stream, and Conversion Studio with device filters and step-level drop-off insights.
+- **Four reusable analytics widgets:** editable metric card, trend chart, traffic-source breakdown, and sortable analytics table.
 - **Animated flip-to-edit UI:** click **Edit data** on any analytics component to flip it to its own editor; **Confirm & preview** saves your values and flips back to the updated component.
 - **Per-component browser persistence:** each analytics component saves its own demo data in local storage so you can revisit and edit values without affecting the other widgets.
 - **Live data visualizations:** edits to KPI values, trend points, source counts, and table rows are reflected in the preview once confirmed.
@@ -52,8 +53,9 @@ The analytics widgets use illustrative demo data so they can be explored without
 - `src/components/AnalyticsDashboard.tsx`: editable composed analytics dashboard
 - `src/components/EditableAnalyticsPreviews.tsx`: editable metric card, trend chart, source breakdown, and data table previews
 - `src/components/AnalyticsComponents.tsx`: analytics UI building blocks
-- `src/components/GlassKit.tsx`: reusable UI primitives and live preview renderer
+- `src/components/GlassKit.tsx`: current showcase primitives and live preview renderer
 - `src/components/SignatureComponents.tsx`: eight interactive signature components built with Framer Motion
+- `src/components/AnalyticsExperiences.tsx`: Realtime Pulse and Conversion Studio dashboards
 - `src/data/components.ts`: component catalogue and examples
 - `src/styles.css`: theme, component visuals, flip animation, and responsive layout
 - `.github/workflows/pages.yml`: automated GitHub Pages deployment
