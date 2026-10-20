@@ -28,7 +28,9 @@ The static production output is generated in `dist/`.
 
 GitHub Actions builds and deploys the static app. In repository **Settings → Pages**, set **Build and deployment → Source** to **GitHub Actions**. Pushing to `main` triggers a build and deployment.
 
-https://soumyaranjan12.github.io/spider-liquid/
+https://ui.spiderpanda.online
+
+Home-server production URL. The GitHub Pages preview remains available at https://soumyaranjan12.github.io/spider-liquid/.
 
 ## Features
 
