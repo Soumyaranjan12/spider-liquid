@@ -233,6 +233,7 @@ function ChessGame({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
   const [mode,setMode]=useState<GameMode>(initialRoom?'multiplayer':'single')
   const gameRef=useRef(new Chess())
   const [position,setPosition]=useState(gameRef.current.fen())
+  const processedRemote=useRef<string>('')
   const [selected,setSelected]=useState<Square|null>(null)
   const [message,setMessage]=useState('Panda pieces move first.')
   const [history,setHistory]=useState<string[]>([])
@@ -256,11 +257,13 @@ function ChessGame({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
     } catch { setMessage('That move is not legal. Choose a highlighted square.') }
   },[api.send,isMulti])
   useEffect(()=>{
-    if(!api.incoming||api.incoming.game!=='chess')return
+    if(!api.incoming||api.incoming.game!=='chess'||processedRemote.current===api.incoming._receivedAt)return
+    processedRemote.current=api.incoming._receivedAt||''
     if(api.incoming.kind==='chess-move'&&typeof api.incoming.from==='string'&&typeof api.incoming.to==='string'){
       applyMove(api.incoming.from as Square,api.incoming.to as Square,typeof api.incoming.promotion==='string'?api.incoming.promotion:'q',false)
     } else if(api.incoming.kind==='chess-reset') resetGame(false)
   },[api.incoming?._receivedAt,applyMove,resetGame])
+  useEffect(()=>{trackEvent('game_started','chess')},[])
   useEffect(()=>{
     if(isMulti||gameRef.current.turn()!=='b'||gameRef.current.isGameOver())return
     const timer=window.setTimeout(()=>{
@@ -331,32 +334,29 @@ function PenFight({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
         api.send({kind:'pen-score',game:'pen',panda:next.panda,spider:next.spider})
         return next
       })
-      if(side===playerSide){trackEvent('pen_point',selected.name,1);setNotice('Direct hit! Point awarded.');setLastResult('hit')}
+      trackEvent('pen_point', selected.name, 1)
+      if(side===playerSide){setNotice('Direct hit! Point awarded.');setLastResult('hit')}
       return
     }
     if(side!=='panda')return
     trackEvent('pen_point',selected.name,1)
-    setProgress(previous=>{
-      const next=previous+1
-      if(next>=3){
-        setLevel(current=>{
-          const upcoming=current+1
-          const unlockedCount=Math.min(pens.length,Math.max(unlocked,upcoming))
-          setUnlockedPens(unlockedCount)
-          setNotice(`Level ${current} cleared — ${pens[unlockedCount-1].name} is now unlocked!`)
-          trackEvent('pen_level_complete','pen',1)
-          try{localStorage.setItem('spiderpanda.pen.unlocked',String(unlockedCount))}catch{}
-          return upcoming
-        })
-        return 0
-      }
+    const next=progress+1
+    if(next>=3){
+      const upcoming=level+1
+      const unlockedCount=Math.min(pens.length,Math.max(unlocked,upcoming))
+      setLevel(upcoming)
+      setUnlocked(unlockedCount)
+      setProgress(0)
+      setSelectedPen(Math.min(unlockedCount-1,pens.length-1))
+      setNotice(`Level ${level} cleared — ${pens[unlockedCount-1].name} is unlocked and equipped!`)
+      trackEvent('pen_level_complete','pen',1)
+      try{localStorage.setItem('spiderpanda.pen.unlocked',String(unlockedCount))}catch{}
+    } else {
+      setProgress(next)
       setNotice(`Direct hit — ${next}/3 points in level ${level}.`)
-      return next
-    })
+    }
     setLastResult('hit')
-  },[isMulti,api.room.role,api.send,playerSide,selected.name,unlocked,level])
-
-  const setUnlockedPens=(value:number)=>setUnlocked(value)
+  },[isMulti,api.room.role,api.send,playerSide,selected.name,unlocked,level,progress])
   const launchShot=useCallback((shot:{side:'panda'|'spider';angle:number;power:number;color:string;remote?:boolean})=>{
     if(isMulti&&!shot.remote&&!api.room.connected){setNotice('Connect to a friend first to launch in multiplayer.');return}
     const angleRad=shot.angle*Math.PI/180
@@ -377,6 +377,7 @@ function PenFight({api,initialRoom}:{api:RoomApi;initialRoom:string}) {
       setScores({panda:api.incoming.panda,spider:api.incoming.spider});setNotice('Score updated by the room host.')
     }
   },[api.incoming?._receivedAt])
+  useEffect(()=>{trackEvent('game_started','pen')},[])
   useEffect(()=>{
     const canvas=canvasRef.current;if(!canvas)return
     const ctx=canvas.getContext('2d');if(!ctx)return
