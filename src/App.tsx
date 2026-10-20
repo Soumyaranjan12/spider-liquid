@@ -5,15 +5,15 @@ import {
   ChevronRight, Github, Layers3, Menu, Search, Settings2, Sparkles, X
 } from 'lucide-react'
 import { components } from './data/components'
-import { GlassBadge, GlassButton, GlassCard, GlassSearch, PlaygroundSample } from './components/GlassKit'
+import { GlassBadge, GlassButton, GlassSearch, PlaygroundSample } from './components/GlassKit'
 
 type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation'
-const categories = ['All components', 'Signature', 'Controls', 'Forms', 'Surfaces', 'Feedback', 'Navigation', 'Overlays', 'Analytics']
-const docsSnippet = "import { GlassButton, GlassCard, GlassToggle } from './components/GlassKit'\n\nexport function Example() {\n  return (\n    <GlassCard>\n      <h2>Welcome back</h2>\n      <p>Beautiful interfaces, with a little depth.</p>\n      <GlassButton variant=\"primary\">Continue</GlassButton>\n    </GlassCard>\n  )\n}"
+const categories = ['All components', 'Signature', 'Analytics']
+const docsSnippet = "import { PrismButton } from './components/SignatureComponents'\n\nexport function Example() {\n  return <PrismButton onClick={() => console.log('Launch')}>Launch sequence</PrismButton>\n}"
 
 export default function App() {
   const [page, setPage] = useState<Page>('Overview')
-  const [selected, setSelected] = useState('button')
+  const [selected, setSelected] = useState('prism-button')
   const [category, setCategory] = useState('All components')
   const [search, setSearch] = useState('')
   const [copied, setCopied] = useState('')
@@ -259,6 +259,21 @@ export default function App() {
     }
   }
   Object.assign(componentReference, {
+    'realtime-pulse': {
+      importName: 'RealtimePulseDashboard', summary: 'A live-feeling telemetry surface with a pulsing signal, shifting KPIs, interactive metric filters, and a rolling event feed.',
+      props: [],
+      usage: 'Toggle Pause/Resume to control the demo stream. Change the time window, traffic channel, or Visitors/Events/Errors metric to animate the chart and KPI values.',
+      accessibility: 'All filters are buttons with accessible group labels. The SVG chart has a text label and the live status does not rely on color alone.',
+      notes: 'Import from ./components/AnalyticsExperiences. The values and event stream are illustrative and generated locally; connect your own telemetry service before production use.'
+    },
+    'conversion-funnel': {
+      importName: 'ConversionFunnelDashboard', summary: 'An interactive journey dashboard with conversion KPIs, animated stage bars, device filters, and stage-level drop-off insights.',
+      props: [],
+      usage: 'Switch between signup and checkout journeys, choose a period/device, toggle drop-off annotations, and select a funnel step to inspect it.',
+      accessibility: 'Funnel stages are buttons with text values. The selected stage details are readable text and do not rely only on bar length.',
+      notes: 'Import from ./components/AnalyticsExperiences. The data is a local example scaled by selected filters, not a connection to real product analytics.'
+    }
+  })
     'prism-button': {
       importName: 'PrismButton', summary: 'A cursor-reactive primary action with a moving specular highlight, layered glass edge, and spring lift.',
       props: [
@@ -332,6 +347,8 @@ export default function App() {
     'command-palette': "import { GlassCommandPalette } from './components/SignatureComponents'",
     'elastic-sheet': "import { ElasticGlassSheet } from './components/SignatureComponents'",
     'toast-stack': "import { LiquidToastStack } from './components/SignatureComponents'",
+    'realtime-pulse': "import { RealtimePulseDashboard } from './components/AnalyticsExperiences'",
+    'conversion-funnel': "import { ConversionFunnelDashboard } from './components/AnalyticsExperiences'",
     analytics: "import AnalyticsDashboard from './components/AnalyticsDashboard'",
     'metric-card': "import { MetricCard } from './components/AnalyticsComponents'",
     'trend-chart': "import { TrendChart } from './components/AnalyticsComponents'",
@@ -445,7 +462,7 @@ export default function App() {
           </section>
           <section className="stats-row studio-stats">
             <div><span className="stat-label">COMPONENTS</span><b>{components.length}</b><small>Reusable React building blocks</small></div>
-            <div><span className="stat-label">CATEGORIES</span><b className="stat-word">8 areas</b><small>From controls to analytics</small></div>
+            <div><span className="stat-label">CATEGORIES</span><b className="stat-word">2 collections</b><small>Signature glass + analytics</small></div>
             <div><span className="stat-label">PLAYGROUND</span><b className="stat-word">Live</b><small>Test component behavior before use</small></div>
             <div><span className="stat-label">CODE & DOCS</span><b className="stat-word">Ready</b><small>Copyable examples and API guidance</small></div>
           </section>
@@ -517,23 +534,11 @@ function MiniPreview({ id }: { id: string }) {
   if (id === 'command-palette') return <div className="mini-sp-palette"><i>⌕</i><span>Search commands…</span><b>⌘ K</b></div>
   if (id === 'elastic-sheet') return <div className="mini-sp-sheet"><i /><b>The space between.</b><span /></div>
   if (id === 'toast-stack') return <div className="mini-sp-toasts"><i>✓ Changes crystallized</i><b>✧ A fresh layer arrived</b></div>
-  if (id === 'button') return <div className="mini-buttons"><span className="mini-primary">Continue <ArrowUpRight size={11} /></span><span className="mini-secondary">Cancel</span></div>
-  if (id === 'icon-button') return <div className="mini-icon-buttons"><span><Settings2 size={15} /></span><span><X size={15} /></span><span><Check size={15} /></span></div>
-  if (id === 'toggle') return <div className="mini-toggle"><span>Enable glass</span><i><b /></i></div>
-  if (id === 'slider') return <div className="mini-slider"><span /><i /></div>
-  if (id === 'segmented') return <div className="mini-segment"><b>Glass</b><span>Liquid</span><span>Solid</span></div>
-  if (id === 'input') return <div className="mini-input">Display name <b>SpiderPanda</b></div>
-  if (id === 'search') return <div className="mini-input"><Search size={13} /> Search components…</div>
-  if (id === 'card') return <div className="mini-metric"><small>WEEKLY ACTIVITY</small><b>12,480</b><i /></div>
-  if (id === 'badge') return <div className="mini-badges"><i>● Draft</i><b>● Ready</b></div>
-  if (id === 'progress') return <div className="mini-progress"><span /><i /></div>
-  if (id === 'toast') return <div className="mini-toast"><Check size={15} /><span><b>Saved</b><small>Changes are live</small></span></div>
-  if (id === 'avatar') return <div className="mini-avatars"><i>SP</i><i>AL</i><i>MK</i></div>
-  if (id === 'nav') return <div className="mini-nav"><b>Home</b><span>Explore</span><span>Saved</span></div>
-  if (id === 'analytics') return <div className="mini-analytics"><div className="mini-analytics-metrics"><b>8.2k<small>Visitors</small></b><b>68%<small>Engagement</small></b></div><div className="mini-analytics-bars">{[38,60,45,75,58,91,72].map((height,i)=><i key={i} style={{height:`${height}%`}}/>)}</div></div>
+  if (id === 'analytics') return <div className="mini-analytics"><div className="mini-analytics-metrics"><b>8.2k<small>Visitors</small></b><b>68%<small>Engagement</small></b></div><div className="mini-analytics-bars">{[38,60,45,75,58,91,72].map((height,i)=><i key={i} style={{height:\`\${height}%\`}}/>)}</div></div>
+  if (id === 'realtime-pulse') return <div className="mini-realtime"><span><i/> LIVE · 15M</span><b>248</b><div>{[25,44,34,58,45,76,61,88,73,96].map((height,i)=><i key={i} style={{height:\`\${height}%\`}}/>)}</div></div>
+  if (id === 'conversion-funnel') return <div className="mini-funnel"><b>CONVERSION FLOW</b><i/><i/><i/><i/><i/></div>
   if (id === 'metric-card') return <div className="mini-metric"><small>MONTHLY REVENUE</small><b>$24,680</b><i /></div>
-  if (id === 'trend-chart') return <div className="mini-analytics"><small className="mini-chart-title">WEEKLY VISITORS</small><div className="mini-analytics-bars">{[28,44,36,67,52,86,70].map((height,i)=><i key={i} style={{height:`${height}%`}}/>)}</div></div>
+  if (id === 'trend-chart') return <div className="mini-analytics"><small className="mini-chart-title">WEEKLY VISITORS</small><div className="mini-analytics-bars">{[28,44,36,67,52,86,70].map((height,i)=><i key={i} style={{height:\`\${height}%\`}}/>)}</div></div>
   if (id === 'traffic-sources') return <div className="mini-sources"><i/><i/><i/><i/><div><span>Direct</span><b>38%</b></div><div><span>Search</span><b>29%</b></div><div><span>Social</span><b>21%</b></div></div>
-  if (id === 'analytics-table') return <div className="mini-table"><div><b>PAGE</b><b>VISITORS</b></div><div><span>/dashboard</span><b>4,280</b></div><div><span>/pricing</span><b>2,310</b></div><div><span>/docs</span><b>1,940</b></div></div>
-  return <div className="mini-dialog"><i /><b>Ready to launch?</b><span /><span /></div>
+  return <div className="mini-table"><div><b>PAGE</b><b>VISITORS</b></div><div><span>/dashboard</span><b>4,280</b></div><div><span>/pricing</span><b>2,310</b></div><div><span>/docs</span><b>1,940</b></div></div>
 }
