@@ -110,7 +110,11 @@ export default function App() {
 
   return <div className={'app-shell backdrop-' + backdrop} style={{
     '--accent': accent, '--accent-rgb': hexToRgb(accent),
-    '--glass-opacity': glass / 100, '--glass-blur': blur + 'px'
+    '--glass-opacity': glass / 100, '--glass-blur': blur + 'px',
+    '--glass-fill': (glass / 100) * 0.24,
+    '--glass-fill-soft': (glass / 100) * 0.07,
+    '--glass-fill-strong': (glass / 100) * 0.32,
+    '--glass-fill-dark': (glass / 100) * 0.3
   } as CSSProperties}>
     <div className="ambient ambient-one" /><div className="ambient ambient-two" /><div className="ambient ambient-three" />
     <aside className={'sidebar ' + (mobileNav ? 'sidebar-open' : '')}>
