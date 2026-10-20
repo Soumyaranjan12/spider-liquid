@@ -355,7 +355,7 @@ export default function App() {
             <div className="hero-copy">
               <div className="eyebrow-line"><span className="eyebrow-icon"><Activity size={13} /></span> BUILD · MEASURE · IMPROVE <span className="eyebrow-rule" /></div>
               <h1>Your next idea<br />starts <span className="gradient-word">here.</span></h1>
-              <p className="hero-subtitle">A practical component studio with interactive previews, a working analytics dashboard, and local workspace insights.</p>
+              <p className="hero-subtitle">A practical component studio with live previews, API documentation, and modular analytics UI building blocks.</p>
               <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setSelected('analytics'); setPage('Playground') }}>Try analytics component <BarChart3 size={16} /></GlassButton><button className="text-button" onClick={() => { setCategory('Analytics'); setPage('Components') }}>Browse analytics components <ArrowUpRight size={15} /></button></div>
               <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>19 reusable components</b><br />Interactive previews · API docs · exportable analytics</span></div>
             </div>
