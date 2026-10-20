@@ -213,8 +213,9 @@ export default function App() {
     }
   }
   const reference = componentReference[current.id] || componentReference.button
-  const componentSnippet = `import { ${reference.importName} } from './components/GlassKit'\n\n${current.code}`
+  const componentSnippet = `${current.id === 'analytics' ? "import AnalyticsDashboard from './components/AnalyticsDashboard'" : `import { ${reference.importName} } from './components/GlassKit'`}\n\n${current.code}`
   const openComponentDocs = () => {
+    trackEvent('docs_open', current.name)
     setPage('Documentation')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -230,6 +231,7 @@ export default function App() {
         throw new Error('Clipboard API unavailable')
       }
       setCopied(label)
+      trackEvent('copy_code', label)
       window.setTimeout(() => setCopied(''), 2200)
     } catch {
       // Clipboard API can be blocked by browser permissions. Try the legacy selection fallback.
@@ -247,6 +249,7 @@ export default function App() {
         textarea.remove()
         if (!success) throw new Error('Copy command was rejected')
         setCopied(label)
+        trackEvent('copy_code', label)
         window.setTimeout(() => setCopied(''), 2200)
       } catch {
         setCopied('Copy failed — select the snippet and copy manually')
@@ -277,7 +280,7 @@ export default function App() {
       <div className="side-caption">WORKSPACE</div>
       <nav className="side-nav">{navItems.map(({ label, icon: Icon }) =>
         <button key={label} className={page === label ? 'selected' : ''} onClick={() => { setPage(label); setMobileNav(false) }}>
-          <Icon size={17} strokeWidth={1.8} /><span>{label}</span>{label === 'Components' && <small>14</small>}
+          <Icon size={17} strokeWidth={1.8} /><span>{label}</span>{label === 'Components' && <small>{components.length}</small>}
         </button>
       )}</nav>
       <div className="side-caption side-caption-spaced">LIBRARY</div>
@@ -391,5 +394,6 @@ function MiniPreview({ id }: { id: string }) {
   if (id === 'toast') return <div className="mini-toast"><Check size={15} /><span><b>Saved</b><small>Changes are live</small></span></div>
   if (id === 'avatar') return <div className="mini-avatars"><i>SP</i><i>AL</i><i>MK</i></div>
   if (id === 'nav') return <div className="mini-nav"><b>Home</b><span>Explore</span><span>Saved</span></div>
+  if (id === 'analytics') return <div className="mini-analytics"><div className="mini-analytics-metrics"><b>8.2k<small>Visitors</small></b><b>68%<small>Engagement</small></b></div><div className="mini-analytics-bars">{[38,60,45,75,58,91,72].map((height,i)=><i key={i} style={{height:`${height}%`}}/>)}</div></div>
   return <div className="mini-dialog"><i /><b>Ready to launch?</b><span /><span /></div>
 }
