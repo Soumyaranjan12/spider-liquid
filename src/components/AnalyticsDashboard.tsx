@@ -1,5 +1,5 @@
 import { useMemo, useState, type Dispatch, type SetStateAction } from 'react'
-import { Activity, ArrowDownRight, ArrowUpRight, Download, Eye, MousePointer2, RotateCcw, Settings2, Users } from 'lucide-react'
+import { Activity, ArrowDownRight, ArrowUpRight, Download, Eye, MousePointer2, Users } from 'lucide-react'
 import AnalyticsFlipCard from './AnalyticsFlipCard'
 
 type Range = '7d' | '30d'
