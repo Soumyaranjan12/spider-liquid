@@ -30,10 +30,13 @@ https://soumyaranjan12.github.io/spider-liquid/
 
 ## Features
 
+- Component documentation follows the selected live-preview component
+- Component API pages include props, usage guidance, example snippets, accessibility notes, and implementation caveats
+- Copy actions include a clipboard fallback and visible success/failure feedback
 - 14-component showcase and category filtering
-- Interactive playground with blur, transparency, backdrop and palette controls
+- Interactive playground with backdrop, transparency and palette controls
 - Eight preset accent palettes plus custom color
-- Copyable TSX component snippets and documentation
+- Reliable copy actions, component-specific API docs, prop references, examples and accessibility notes
 - Responsive layout, keyboard focus styling, and reduced-motion support
 
 ## Project layout
