@@ -83,7 +83,7 @@ export default function AnalyticsDashboard({ title = 'Product analytics', subtit
     storageKey="spiderpanda.analytics-dashboard.v2"
     defaults={DEFAULT_CONFIG}
     renderPreview={config => <DashboardPreview config={config} title={title} subtitle={subtitle} range={range} setRange={setRange} metric={metric} setMetric={setMetric}/>}
-    renderEditor={(draft,setDraft) => <DashboardEditor draft={draft} setDraft={setDraft}/>}
+    renderEditor={(draft,setDraft) => <DashboardEditor draft={draft} setDraft={setDraft} range={range} setRange={setRange} metric={metric} setMetric={setMetric}/>}
   />
 }
 
@@ -115,9 +115,7 @@ function DashboardPreview({config,title,subtitle,range,setRange,metric,setMetric
   </div>
 }
 
-function DashboardEditor({draft,setDraft}:{draft:DashboardConfig;setDraft:Dispatch<SetStateAction<DashboardConfig>>}) {
-  const [range,setRange]=useState<Range>('7d')
-  const [metric,setMetric]=useState<Metric>('Visitors')
+function DashboardEditor({draft,setDraft,range,setRange,metric,setMetric}:{draft:DashboardConfig;setDraft:Dispatch<SetStateAction<DashboardConfig>>;range:Range;setRange:(range:Range)=>void;metric:Metric;setMetric:(metric:Metric)=>void}) {
   const data=draft[range]
   const patch=(updater:(value:RangeData)=>RangeData)=>setDraft(previous=>({...previous,[range]:updater(previous[range])}))
   const updateKpi=(key:KpiKey,field:keyof MetricValue,value:string)=>patch(previous=>({...previous,kpis:{...previous.kpis,[key]:{...previous.kpis[key],[field]:value}}}))
