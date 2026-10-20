@@ -51,7 +51,7 @@ export default function AnalyticsFlipCard<T extends object>({
       animate={{ rotateY: editing ? 180 : 0 }}
       transition={{ duration: 0.72, ease: [0.22, 0.68, 0, 1] }}
     >
-      <div className="analytics-flip-face analytics-flip-front" aria-hidden={editing} inert={editing}>
+      <div className="analytics-flip-face analytics-flip-front" aria-hidden={editing}>
         <div className="afc-toolbar">
           <div><span>LIVE COMPONENT</span><b>{name}</b></div>
           <button type="button" onClick={openEditor} aria-label={`Edit data for ${name}`}><PencilLine size={13}/> Edit data</button>
@@ -59,7 +59,7 @@ export default function AnalyticsFlipCard<T extends object>({
         <div className="afc-preview-content">{renderPreview(saved)}</div>
       </div>
 
-      <div className="analytics-flip-face analytics-flip-back" aria-hidden={!editing} inert={!editing}>
+      <div className="analytics-flip-face analytics-flip-back" aria-hidden={!editing}>
         <div className="afc-editor-head"><span>COMPONENT DATA</span><h3>Edit {name}</h3><p>Adjust the demo values. Confirm to update the preview and save them in this browser.</p></div>
         <div className="afc-editor-body">{renderEditor(draft, setDraft)}</div>
         <div className="afc-editor-footer"><span>{message}</span><button type="button" onClick={confirm}><Check size={14}/> Confirm &amp; preview</button></div>
