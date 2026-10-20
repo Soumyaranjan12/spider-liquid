@@ -533,11 +533,11 @@ function MiniPreview({ id }: { id: string }) {
   if (id === 'command-palette') return <div className="mini-sp-palette"><i>⌕</i><span>Search commands…</span><b>⌘ K</b></div>
   if (id === 'elastic-sheet') return <div className="mini-sp-sheet"><i /><b>The space between.</b><span /></div>
   if (id === 'toast-stack') return <div className="mini-sp-toasts"><i>✓ Changes crystallized</i><b>✧ A fresh layer arrived</b></div>
-  if (id === 'analytics') return <div className="mini-analytics"><div className="mini-analytics-metrics"><b>8.2k<small>Visitors</small></b><b>68%<small>Engagement</small></b></div><div className="mini-analytics-bars">{[38,60,45,75,58,91,72].map((height,i)=><i key={i} style={{height:\`\${height}%\`}}/>)}</div></div>
-  if (id === 'realtime-pulse') return <div className="mini-realtime"><span><i/> LIVE · 15M</span><b>248</b><div>{[25,44,34,58,45,76,61,88,73,96].map((height,i)=><i key={i} style={{height:\`\${height}%\`}}/>)}</div></div>
+  if (id === 'analytics') return <div className="mini-analytics"><div className="mini-analytics-metrics"><b>8.2k<small>Visitors</small></b><b>68%<small>Engagement</small></b></div><div className="mini-analytics-bars">{[38,60,45,75,58,91,72].map((height,i)=><i key={i} style={{height:height + '%'}} />)}</div></div>
+  if (id === 'realtime-pulse') return <div className="mini-realtime"><span><i/> LIVE · 15M</span><b>248</b><div>{[25,44,34,58,45,76,61,88,73,96].map((height,i)=><i key={i} style={{height:height + '%'}} />)}</div></div>
   if (id === 'conversion-funnel') return <div className="mini-funnel"><b>CONVERSION FLOW</b><i/><i/><i/><i/><i/></div>
   if (id === 'metric-card') return <div className="mini-metric"><small>MONTHLY REVENUE</small><b>$24,680</b><i /></div>
-  if (id === 'trend-chart') return <div className="mini-analytics"><small className="mini-chart-title">WEEKLY VISITORS</small><div className="mini-analytics-bars">{[28,44,36,67,52,86,70].map((height,i)=><i key={i} style={{height:\`\${height}%\`}}/>)}</div></div>
+  if (id === 'trend-chart') return <div className="mini-analytics"><small className="mini-chart-title">WEEKLY VISITORS</small><div className="mini-analytics-bars">{[28,44,36,67,52,86,70].map((height,i)=><i key={i} style={{height:height + '%'}} />)}</div></div>
   if (id === 'traffic-sources') return <div className="mini-sources"><i/><i/><i/><i/><div><span>Direct</span><b>38%</b></div><div><span>Search</span><b>29%</b></div><div><span>Social</span><b>21%</b></div></div>
   return <div className="mini-table"><div><b>PAGE</b><b>VISITORS</b></div><div><span>/dashboard</span><b>4,280</b></div><div><span>/pricing</span><b>2,310</b></div><div><span>/docs</span><b>1,940</b></div></div>
 }
