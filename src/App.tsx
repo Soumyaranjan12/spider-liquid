@@ -272,8 +272,7 @@ export default function App() {
       usage: 'Switch between signup and checkout journeys, choose a period/device, toggle drop-off annotations, and select a funnel step to inspect it.',
       accessibility: 'Funnel stages are buttons with text values. The selected stage details are readable text and do not rely only on bar length.',
       notes: 'Import from ./components/AnalyticsExperiences. The data is a local example scaled by selected filters, not a connection to real product analytics.'
-    }
-  })
+    },
     'prism-button': {
       importName: 'PrismButton', summary: 'A cursor-reactive primary action with a moving specular highlight, layered glass edge, and spring lift.',
       props: [
