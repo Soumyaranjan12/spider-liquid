@@ -8,7 +8,7 @@ import { components } from './data/components'
 import { GlassBadge, GlassButton, GlassCard, GlassSearch, PlaygroundSample } from './components/GlassKit'
 
 type Page = 'Overview' | 'Components' | 'Playground' | 'Documentation'
-const categories = ['All components', 'Controls', 'Forms', 'Surfaces', 'Feedback', 'Navigation', 'Overlays', 'Analytics']
+const categories = ['All components', 'Signature', 'Controls', 'Forms', 'Surfaces', 'Feedback', 'Navigation', 'Overlays', 'Analytics']
 const docsSnippet = "import { GlassButton, GlassCard, GlassToggle } from './components/GlassKit'\n\nexport function Example() {\n  return (\n    <GlassCard>\n      <h2>Welcome back</h2>\n      <p>Beautiful interfaces, with a little depth.</p>\n      <GlassButton variant=\"primary\">Continue</GlassButton>\n    </GlassCard>\n  )\n}"
 
 export default function App() {
@@ -258,8 +258,80 @@ export default function App() {
       notes: 'This component handles client-side sorting only. Fetch, filter, paginate, and validate records in the parent application when needed.'
     }
   }
+  Object.assign(componentReference, {
+    'prism-button': {
+      importName: 'PrismButton', summary: 'A cursor-reactive primary action with a moving specular highlight, layered glass edge, and spring lift.',
+      props: [
+        { name: 'children', type: 'ReactNode', description: 'The action label or inline content.' },
+        { name: 'onClick', type: '() => void', description: 'Optional activation callback.' }
+      ],
+      usage: 'Use for a single high-emphasis action. Move the pointer to steer the reflected highlight; the button lifts on hover and compresses on press.',
+      accessibility: 'Rendered as a native button, with keyboard focus visibility and a reduced-motion fallback.',
+      notes: 'Import from ./components/SignatureComponents. The highlight follows pointer coordinates and returns to center when the pointer leaves.'
+    },
+    'mercury-switch': {
+      importName: 'MercurySwitch', summary: 'A switch with a liquid-metal thumb, elastic travel, and a luminous active track.',
+      props: [
+        { name: 'defaultChecked', type: 'boolean', description: 'Initial on/off state; defaults to true.' },
+        { name: 'label', type: 'string', description: 'Visible and accessible switch label.' }
+      ],
+      usage: 'Use for an immediate binary setting. The preview keeps its own state so you can try the transition directly.',
+      accessibility: 'Exposes role="switch", aria-checked, and an accessible label. Supports keyboard operation through the native button.',
+      notes: 'Import from ./components/SignatureComponents. For app settings that must be controlled externally, adapt the component to accept checked and onChange.'
+    },
+    'refractive-card': {
+      importName: 'RefractiveCard', summary: 'A display surface with pointer-tracked light, perspective tilt, edge refraction, and layered highlights.',
+      props: [],
+      usage: 'Use for a featured item, product tile, or showcase surface. Keep important text within the content area and avoid using the tilt effect on dense layouts.',
+      accessibility: 'Decorative motion does not carry essential information, and the effect becomes still when reduced motion is preferred.',
+      notes: 'Import from ./components/SignatureComponents. Pointer position controls the specular hotspot and the spring-settled 3D angle.'
+    },
+    'liquid-dock': {
+      importName: 'LiquidDock', summary: 'A floating navigation dock whose active glass capsule glides between destinations.',
+      props: [],
+      usage: 'Best for a small set of destinations or modes. Click an item to move the active pill and update the current destination label.',
+      accessibility: 'Uses a labeled nav region and buttons, with aria-current on the selected destination.',
+      notes: 'Import from ./components/SignatureComponents. Replace the sample destinations with your router or local state in production.'
+    },
+    'fluid-segmented': {
+      importName: 'FluidSegmentedControl', summary: 'A three-way material selector with a shared animated selection capsule and live material preview.',
+      props: [],
+      usage: 'Keep choices mutually exclusive and short. The preview below the control updates to explain the selected material mode.',
+      accessibility: 'Each choice is a native button and the selection is conveyed by both label and state styling.',
+      notes: 'Import from ./components/SignatureComponents. Options are illustrative in this demo; make options and onChange configurable for a reusable production API.'
+    },
+    'command-palette': {
+      importName: 'GlassCommandPalette', summary: 'A searchable command overlay that opens with a morphing entrance and supports Ctrl/Cmd+K and Escape.',
+      props: [],
+      usage: 'Use for keyboard-first navigation and frequently used actions. Try searching “activity” or “project”, then select a result.',
+      accessibility: 'The overlay is exposed as a dialog, has labeled search and close controls, and responds to Escape.',
+      notes: 'Import from ./components/SignatureComponents. This is a self-contained demo command list; connect results to actual application actions.'
+    },
+    'elastic-sheet': {
+      importName: 'ElasticGlassSheet', summary: 'A bottom sheet that enters with spring physics and can be pulled down to dismiss.',
+      props: [],
+      usage: 'Use for lightweight secondary content on touch-first layouts. Open the sheet, drag its handle down, or use the close actions.',
+      accessibility: 'The open panel has dialog semantics and named content; all close actions are keyboard-accessible buttons.',
+      notes: 'Import from ./components/SignatureComponents. For production, add focus trapping/restoration and coordinate drag behavior with nested scroll areas.'
+    },
+    'toast-stack': {
+      importName: 'LiquidToastStack', summary: 'A staged notification stack with layered depth, spring entry, dismissal, and clear-all behavior.',
+      props: [],
+      usage: 'Add one toast at a time to see the stack reflow. Keep each message brief and reserve success styling for a confirmed result.',
+      accessibility: 'The notification region uses aria-live, and every toast can be dismissed with a labeled button.',
+      notes: 'Import from ./components/SignatureComponents. This example is manually triggered and does not auto-dismiss, so you can inspect the entrance and exit animations.'
+    }
+  })
   const reference = componentReference[current.id] || componentReference.button
   const analyticsImports: Record<string, string> = {
+    'prism-button': "import { PrismButton } from './components/SignatureComponents'",
+    'mercury-switch': "import { MercurySwitch } from './components/SignatureComponents'",
+    'refractive-card': "import { RefractiveCard } from './components/SignatureComponents'",
+    'liquid-dock': "import { LiquidDock } from './components/SignatureComponents'",
+    'fluid-segmented': "import { FluidSegmentedControl } from './components/SignatureComponents'",
+    'command-palette': "import { GlassCommandPalette } from './components/SignatureComponents'",
+    'elastic-sheet': "import { ElasticGlassSheet } from './components/SignatureComponents'",
+    'toast-stack': "import { LiquidToastStack } from './components/SignatureComponents'",
     analytics: "import AnalyticsDashboard from './components/AnalyticsDashboard'",
     'metric-card': "import { MetricCard } from './components/AnalyticsComponents'",
     'trend-chart': "import { TrendChart } from './components/AnalyticsComponents'",
@@ -355,18 +427,18 @@ export default function App() {
             <div className="hero-copy">
               <div className="eyebrow-line"><span className="eyebrow-icon"><Layers3 size={13} /></span> BUILD WITH BETTER BUILDING BLOCKS <span className="eyebrow-rule" /></div>
               <h1>Interfaces with<br /><span className="gradient-word">more feeling.</span></h1>
-              <p className="hero-subtitle">A curated React component library with polished glass surfaces, practical controls, clear feedback, and copy-ready examples. Explore every component in the live playground.</p>
+              <p className="hero-subtitle">A signature collection of animated liquid-glass components, with cursor-reactive light, spring physics, refraction, and interactive overlays. Try each piece, then copy the React code.</p>
               <div className="hero-actions"><GlassButton variant="primary" onClick={() => { setCategory('All components'); setPage('Components') }}>Explore components <ArrowRight size={16} /></GlassButton><button className="text-button" onClick={() => { setSelected('button'); setPage('Playground') }}>Open playground <ArrowUpRight size={15} /></button></div>
-              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>19 reusable components</b><br />Live previews · API docs · copy-ready code</span></div>
+              <div className="hero-proof"><div className="proof-avatars"><span>SP</span><span>UI</span><span>↗</span></div><span><b>{components.length} reusable React components</b><br />Live previews · API docs · copy-ready code</span></div>
             </div>
             <div className="home-launch-panel glass-panel overview-toolkit">
               <div className="home-panel-top"><div><span className="mini-label">COMPONENT EXPLORER</span><h2>Find your starting point</h2></div><span className="home-panel-live"><i/> Ready to preview</span></div>
-              <p className="overview-toolkit-copy">Jump into a few popular building blocks, or browse the full library across controls, forms, surfaces, feedback, navigation, overlays, and analytics.</p>
+              <p className="overview-toolkit-copy">Start with the signature interactions: a cursor-lit action, a mercury switch, refractive glass, or a fluid navigation dock.</p>
               <div className="quick-game-grid">
-                <button onClick={() => { setSelected('button'); setPage('Playground') }}><span className="quick-game-icon component-icon">↗</span><span><b>Liquid Button</b><small>Primary actions and interaction</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setSelected('toggle'); setPage('Playground') }}><span className="quick-game-icon component-icon">◉</span><span><b>Liquid Toggle</b><small>A tactile, controlled switch</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setSelected('card'); setPage('Playground') }}><span className="quick-game-icon component-icon">▱</span><span><b>Glass Card</b><small>Surfaces for grouped content</small></span><ChevronRight size={15}/></button>
-                <button onClick={() => { setSelected('dialog'); setPage('Playground') }}><span className="quick-game-icon component-icon">□</span><span><b>Glass Dialog</b><small>Confirmation and focused tasks</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('prism-button'); setPage('Playground') }}><span className="quick-game-icon component-icon">✧</span><span><b>Prism Button</b><small>Cursor-lit, spring-loaded action</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('mercury-switch'); setPage('Playground') }}><span className="quick-game-icon component-icon">◉</span><span><b>Mercury Switch</b><small>Elastic toggle with liquid-metal feel</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('refractive-card'); setPage('Playground') }}><span className="quick-game-icon component-icon">▱</span><span><b>Refractive Card</b><small>Cursor-tracked light and 3D tilt</small></span><ChevronRight size={15}/></button>
+                <button onClick={() => { setSelected('liquid-dock'); setPage('Playground') }}><span className="quick-game-icon component-icon">⌘</span><span><b>Liquid Dock</b><small>Springing active navigation pill</small></span><ChevronRight size={15}/></button>
               </div>
               <div className="home-panel-foot"><div><Code2 size={15}/><span><b>Ready for your app</b><small>Copy the TSX examples into your project</small></span></div><button onClick={() => setPage('Documentation')}>Read the docs <ArrowUpRight size={13}/></button></div>
             </div>
@@ -379,7 +451,7 @@ export default function App() {
           </section>
           <section className="section-block">
             <div className="section-heading"><div><div className="section-kicker">COMPONENT LIBRARY</div><h2>Useful pieces. <span>Ready to ship.</span></h2><p className="section-description">Browse the library by purpose, try each component, and copy the code you need.</p></div><button className="view-all" onClick={() => { setCategory('All components'); setPage('Components') }}>Browse all components <ArrowRight size={15} /></button></div>
-            <div className="featured-grid">{components.filter(c => ['button', 'toggle', 'card', 'dialog'].includes(c.id)).map((c, i) =>
+            <div className="featured-grid">{components.filter(c => ['prism-button', 'mercury-switch', 'refractive-card', 'liquid-dock'].includes(c.id)).map((c, i) =>
               <motion.button whileHover={{ y: -4 }} key={c.id} className={'featured-card feature-' + i} onClick={() => { setSelected(c.id); setPage('Playground') }}>
                 <div className="featured-card-top"><span className="component-index">0{i + 1}</span><span className="card-arrow"><ArrowUpRight size={15} /></span></div>
                 <div className="featured-preview"><MiniPreview id={c.id} /></div>
@@ -391,7 +463,7 @@ export default function App() {
         {page === 'Components' && <section className="subpage">
           <div className="subpage-heading"><div className="section-kicker">THE LIBRARY</div><h1>Made to <span>compose.</span></h1><p>Explore the full collection of interactive liquid-glass building blocks.</p></div>
           <div className="library-toolbar"><GlassSearch placeholder="Search components…" value={search} onChange={setSearch} /><div className="category-pills">{categories.map(c => <button key={c} className={category === c ? 'active' : ''} onClick={() => setCategory(c)}>{c}</button>)}</div></div>
-          <div className="component-grid">{filtered.map((c, i) => <motion.button key={c.id} whileHover={{ y: -3 }} className="library-card glass-panel" onClick={() => { setSelected(c.id); setPage('Playground') }}><div className="library-card-head"><span className="component-index">{String(i + 1).padStart(2, '0')}</span><GlassBadge tone="success">{c.status}</GlassBadge></div><div className="library-preview"><MiniPreview id={c.id} /></div><div className="featured-info"><span>{c.category}</span><h3>{c.name}</h3><p>{c.description}</p></div><div className="library-card-foot">Open in playground <ArrowUpRight size={14} /></div></motion.button>)}</div>
+          <div className="component-grid">{filtered.map((c, i) => <motion.button key={c.id} whileHover={{ y: -3 }} className="library-card glass-panel" onClick={() => { setSelected(c.id); setPage('Playground') }}><div className="library-card-head"><span className="component-index">{String(i + 1).padStart(2, '0')}</span><GlassBadge tone={c.status === 'Signature' ? 'accent' : 'success'}>{c.status}</GlassBadge></div><div className="library-preview"><MiniPreview id={c.id} /></div><div className="featured-info"><span>{c.category}</span><h3>{c.name}</h3><p>{c.description}</p></div><div className="library-card-foot">Open in playground <ArrowUpRight size={14} /></div></motion.button>)}</div>
           {filtered.length === 0 && <div className="empty-state glass-panel"><Search size={24} /><h3>No components found</h3><p>Try another search or select a different category.</p><button onClick={() => { setSearch(''); setCategory('All components') }}>Clear filters</button></div>}
         </section>}
         {page === 'Playground' && <section className="subpage playground-page">
@@ -437,6 +509,14 @@ export default function App() {
 }
 
 function MiniPreview({ id }: { id: string }) {
+  if (id === 'prism-button') return <div className="mini-sp-prism"><span>Launch sequence <b>↗</b></span></div>
+  if (id === 'mercury-switch') return <div className="mini-sp-mercury"><span>Fluid motion</span><i><b /></i></div>
+  if (id === 'refractive-card') return <div className="mini-sp-refract"><span>✧ SURFACE / 003</span><b>Glass, in motion.</b><i /></div>
+  if (id === 'liquid-dock') return <div className="mini-sp-dock"><i>⌂</i><b>◉</b><i>▱</i><i>◌</i></div>
+  if (id === 'fluid-segmented') return <div className="mini-sp-segment"><b>Glass</b><strong>Liquid</strong><b>Solid</b></div>
+  if (id === 'command-palette') return <div className="mini-sp-palette"><i>⌕</i><span>Search commands…</span><b>⌘ K</b></div>
+  if (id === 'elastic-sheet') return <div className="mini-sp-sheet"><i /><b>The space between.</b><span /></div>
+  if (id === 'toast-stack') return <div className="mini-sp-toasts"><i>✓ Changes crystallized</i><b>✧ A fresh layer arrived</b></div>
   if (id === 'button') return <div className="mini-buttons"><span className="mini-primary">Continue <ArrowUpRight size={11} /></span><span className="mini-secondary">Cancel</span></div>
   if (id === 'icon-button') return <div className="mini-icon-buttons"><span><Settings2 size={15} /></span><span><X size={15} /></span><span><Check size={15} /></span></div>
   if (id === 'toggle') return <div className="mini-toggle"><span>Enable glass</span><i><b /></i></div>
