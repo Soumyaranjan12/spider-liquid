@@ -38,12 +38,16 @@ function trafficRows(data:TrafficConfig):TrafficSource[] {return [
   {name:data.socialName||'Social',value:Math.max(0,Number(data.socialValue)||0),color:'#65d8a0'},
   {name:data.referralName||'Referral',value:Math.max(0,Number(data.referralValue)||0),color:'#79b7ff'}
 ]}
+const trafficEditorFields = [
+  {prefix:'direct',nameKey:'directName',valueKey:'directValue',name:'Direct',color:'#ff535f'},
+  {prefix:'search',nameKey:'searchName',valueKey:'searchValue',name:'Search',color:'#a78bfa'},
+  {prefix:'social',nameKey:'socialName',valueKey:'socialValue',name:'Social',color:'#65d8a0'},
+  {prefix:'referral',nameKey:'referralName',valueKey:'referralValue',name:'Referral',color:'#79b7ff'}
+] as const
 export function EditableTrafficSources() {
   return <AnalyticsFlipCard<TrafficConfig> name="Traffic Sources" storageKey="spiderpanda.traffic-sources.v1" defaults={trafficDefaults}
     renderPreview={data=><TrafficSources title={data.title} data={trafficRows(data)}/>}
-    renderEditor={(draft,setDraft)=><div className="afc-fields"><label>Widget title<input value={draft.title} onChange={e=>setDraft(p=>({...p,title:e.target.value}))}/></label><div className="afc-source-editor">{([
-      {prefix:'direct',name:'Direct',color:'#ff535f'},{prefix:'search',name:'Search',color:'#a78bfa'},{prefix:'social',name:'Social',color:'#65d8a0'},{prefix:'referral',name:'Referral',color:'#79b7ff'}
-    ] as const).map(source=><div className="afc-source-pair" key={source.prefix}><label><span><i style={{background:source.color}}/>{source.name} label</span><input value={draft[`${source.prefix}Name`]} onChange={e=>setDraft(p=>({...p,[`${source.prefix}Name`]:e.target.value}))}/></label><label><span>Value</span><input type="number" min="0" step="any" value={draft[`${source.prefix}Value`]} onChange={e=>setDraft(p=>({...p,[`${source.prefix}Value`]:e.target.value}))}/></label></div>)}</div><p className="afc-hint">Source percentages and the stacked bar are calculated from these values after confirmation.</p></div>}
+    renderEditor={(draft,setDraft)=><div className="afc-fields"><label>Widget title<input value={draft.title} onChange={e=>setDraft(p=>({...p,title:e.target.value}))}/></label><div className="afc-source-editor">{trafficEditorFields.map(source=><div className="afc-source-pair" key={source.prefix}><label><span><i style={{background:source.color}}/>{source.name} label</span><input value={draft[source.nameKey]} onChange={e=>setDraft(p=>({...p,[source.nameKey]:e.target.value}))}/></label><label><span>Value</span><input type="number" min="0" step="any" value={draft[source.valueKey]} onChange={e=>setDraft(p=>({...p,[source.valueKey]:e.target.value}))}/></label></div>)}</div><p className="afc-hint">Source percentages and the stacked bar are calculated from these values after confirmation.</p></div>}
   />
 }
 
