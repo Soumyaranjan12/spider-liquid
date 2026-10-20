@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, Code2, Copy,
-  Gamepad2, Github, Layers3, Menu, Search, Settings2, Sparkles, Trophy, X
+  ChevronRight, Gamepad2, Github, Layers3, Menu, Search, Settings2, Sparkles, X
 } from 'lucide-react'
 import { components } from './data/components'
 import AnalyticsPanel from './components/AnalyticsPanel'
