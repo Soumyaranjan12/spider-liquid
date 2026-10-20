@@ -337,7 +337,7 @@ export default function App() {
       )}</div>
       <div className="sidebar-bottom">
         <button className="version-card" onClick={() => { setSelected('analytics'); setPage('Playground') }}><div className="version-icon"><BarChart3 size={15} /></div><div><b>Analytics component</b><p>KPI cards, trends, CSV export</p></div><ArrowUpRight size={14} /></button>
-        <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Creative lab</span></div><button aria-label="Open analytics" onClick={() => setPage('Analytics')}><BarChart3 size={16} /></button></div>
+        <div className="profile-row"><div className="profile-avatar">SP</div><div><b>SpiderPanda</b><span>Creative lab</span></div><button aria-label="Browse analytics components" onClick={() => { setCategory('Analytics'); setPage('Components') }}><BarChart3 size={16} /></button></div>
       </div>
     </aside>
     {mobileNav && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileNav(false)} />}
@@ -419,7 +419,7 @@ export default function App() {
             </div>
           </div>
         </section>}
-        <footer className="page-footer"><div className="footer-brand"><span className="brand-mark mini"><span /></span><span>SPIDERPANDA <small>CREATIVE LAB</small></span></div><span>Useful components. Clear insights.</span><button onClick={() => setPage('Analytics')}>Activity <ArrowUpRight size={13} /></button></footer>
+        <footer className="page-footer"><div className="footer-brand"><span className="brand-mark mini"><span /></span><span>SPIDERPANDA <small>CREATIVE LAB</small></span></div><span>Useful components. Clear insights.</span><button onClick={() => { setCategory('Analytics'); setPage('Components') }}>Analytics components <ArrowUpRight size={13} /></button></footer>
       </div>
     </main>
     <AnimatePresence>{toast && <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="global-toast"><Check size={16} /><span>Interaction complete — looking good.</span><button onClick={() => setToast(false)}><X size={14} /></button></motion.div>}</AnimatePresence>
