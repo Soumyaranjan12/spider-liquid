@@ -8,6 +8,7 @@ export type ComponentInfo = {
 }
 
 export const components: ComponentInfo[] = [
+  { id: 'analytics', name: 'Analytics Dashboard', category: 'Analytics', description: 'Interactive KPI cards, traffic trends, source breakdown and CSV export.', status: 'Ready', code: `<AnalyticsDashboard title="Product analytics" subtitle="Workspace activity" />` },
   { id: 'button', name: 'Liquid Button', category: 'Controls', description: 'A tactile, luminous button with a soft specular edge.', status: 'Ready', code: `<GlassButton variant="primary" onClick={() => console.log(1)}>Get started</GlassButton>` },
   { id: 'icon-button', name: 'Icon Button', category: 'Controls', description: 'Compact actions for toolbars and floating controls.', status: 'Ready', code: `<GlassIconButton label="Open settings">Settings</GlassIconButton>` },
   { id: 'toggle', name: 'Liquid Toggle', category: 'Controls', description: 'A clear on/off state with a springy thumb.', status: 'Ready', code: `<GlassToggle checked={true} onChange={(checked) => console.log(checked)} label="Enable glass" />` },
