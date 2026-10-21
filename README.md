@@ -5,7 +5,7 @@
 SpiderPanda Creative Lab is a React + TypeScript playground for expressive glass UI and animated analytics. Explore cursor-reactive surfaces, spring-driven controls, draggable overlays, live-feeling charts, and interactive dashboards — then inspect the code and copy examples into your own project.
 
 <p align="left">
-  <a href="https://ui.spiderpanda.online"><strong>Open the live playground ↗</strong></a>
+  <a href="https://components.spiderpanda.online"><strong>Open the live playground ↗</strong></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/Soumyaranjan12/spider-liquid/actions/workflows/pages.yml"><strong>Build & deploy status</strong></a>
 </p>
@@ -55,7 +55,7 @@ The current library is deliberately focused: **15 components in two collections*
 
 ## Try it online
 
-Visit **[ui.spiderpanda.online](https://ui.spiderpanda.online)**.
+Visit **[components.spiderpanda.online](https://components.spiderpanda.online)**.
 
 1. Open **Components** to browse the catalogue.
 2. Choose **Signature** to see the animated glass components, or **Analytics** to explore dashboards and widgets.
@@ -152,7 +152,7 @@ GitHub Actions builds and deploys this project to GitHub Pages when changes are 
 
 For repository deployment settings, open **Settings → Pages** and select **GitHub Actions** as the build and deployment source.
 
-- Live site: [ui.spiderpanda.online](https://ui.spiderpanda.online)
+- Live site: [components.spiderpanda.online](https://components.spiderpanda.online)
 - GitHub Pages site: [soumyaranjan12.github.io/spider-liquid](https://soumyaranjan12.github.io/spider-liquid/)
 - Build and deploy workflow: [Deploy to GitHub Pages](https://github.com/Soumyaranjan12/spider-liquid/actions/workflows/pages.yml)
 
