@@ -6,11 +6,7 @@ SpiderPanda Creative Lab is a React + TypeScript playground for expressive glass
 
 <p align="left">
   <a href="https://components.spiderpanda.online"><strong>Open the live playground ↗</strong></a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/Soumyaranjan12/spider-liquid/actions/workflows/pages.yml"><strong>Build & deploy status</strong></a>
 </p>
-
-[![Deploy to GitHub Pages](https://github.com/Soumyaranjan12/spider-liquid/actions/workflows/pages.yml/badge.svg)](https://github.com/Soumyaranjan12/spider-liquid/actions/workflows/pages.yml)
 
 ---
 
@@ -145,16 +141,6 @@ This project uses **React**, **TypeScript**, **Framer Motion**, **Lucide React**
 ## Accessibility and motion
 
 The project uses semantic buttons and labeled controls where appropriate. Some effects are decorative; essential information should remain readable without animation or color alone. Check keyboard focus and contrast in your own app, and test your chosen motion settings with real users. Reduced-motion handling is included for key animation effects, but should still be reviewed when adapting components.
-
-## Deploying
-
-GitHub Actions builds and deploys this project to GitHub Pages when changes are pushed to `main`.
-
-For repository deployment settings, open **Settings → Pages** and select **GitHub Actions** as the build and deployment source.
-
-- Live site: [components.spiderpanda.online](https://components.spiderpanda.online)
-- GitHub Pages site: [soumyaranjan12.github.io/spider-liquid](https://soumyaranjan12.github.io/spider-liquid/)
-- Build and deploy workflow: [Deploy to GitHub Pages](https://github.com/Soumyaranjan12/spider-liquid/actions/workflows/pages.yml)
 
 ## Project structure
 
